@@ -183,6 +183,10 @@
             android:textSize="15sp"
             tools:text="Say &quot;Hey Friday&quot;" />
 
+        <TextView android:id="@+id/wakeDiagnostics" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="6dp" android:gravity="center" android:textColor="@color/text_dim"
+            android:textSize="12sp" android:paddingHorizontal="12dp" />
+
         <TextView
             android:id="@+id/lastResult"
             android:layout_width="match_parent"

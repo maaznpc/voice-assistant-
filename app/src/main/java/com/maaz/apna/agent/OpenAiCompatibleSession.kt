@@ -22,9 +22,9 @@ class OpenAiCompatibleSession(
     toolSpecs: List<ToolSpec>,
 ) : ChatSession {
 
-    private val http = OkHttpClient.Builder()
-        .connectTimeout(20, TimeUnit.SECONDS)
-        .readTimeout(240, TimeUnit.SECONDS) // local models can be slow
+    // Reuse DNS/TLS connections across voice turns and model sessions.
+    private val http = SHARED_HTTP.newBuilder()
+        .readTimeout(if (config.preset.id in setOf("custom", "lmstudio", "ollama")) 240 else 45, TimeUnit.SECONDS)
         .build()
 
     private val tools = JSONArray().apply {
@@ -66,17 +66,19 @@ class OpenAiCompatibleSession(
             .put("model", config.model)
             .put("messages", JSONArray(trimmedHistory()))
             .put("tools", tools)
-            .put("tool_choice", "auto")
+            .put("tool_choice", if (config.preset.id == "groq" && tools.length() > 0) "required" else "auto")
 
         val request = Request.Builder()
-            .url(config.baseUrl.trimEnd('/') + "/chat/completions")
+            .url(com.maaz.apna.ApiEndpoints.chat(config.baseUrl))
             .apply { if (config.apiKey.isNotBlank()) header("Authorization", "Bearer ${config.apiKey}") }
             .post(body.toString().toRequestBody("application/json".toMediaType()))
             .build()
 
         val json = http.newCall(request).execute().use { resp ->
             val text = resp.body?.string().orEmpty()
-            if (!resp.isSuccessful) throw IOException("HTTP ${resp.code} from ${config.preset.label}: ${text.take(500)}")
+            if (!resp.isSuccessful) throw IOException("Dialogue API HTTP ${resp.code} from ${config.preset.label}. " +
+                (if (resp.code == 404) "Check the Base URL and model ID; a pasted full chat endpoint is normalized. " else "") +
+                (if (config.preset.id == "groq" && config.model.startsWith("llama-3.")) "Legacy Llama models are retired on Groq free/developer plans; try openai/gpt-oss-20b. " else "") + text.take(300))
             JSONObject(text)
         }
 
@@ -129,6 +131,7 @@ class OpenAiCompatibleSession(
     }
 
     companion object {
+        private val SHARED_HTTP = OkHttpClient.Builder().connectTimeout(10, TimeUnit.SECONDS).build()
         private const val KEEP_FULL_OBSERVATIONS = 3
         const val SCREEN_MARKER = "=== SCREEN"
     }

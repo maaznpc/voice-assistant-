@@ -52,7 +52,7 @@ object SpeechModel {
  * audio stream, so nothing is lost between "Hey Friday" and what follows. Everything runs on
  * the phone. Callbacks are delivered on the main thread.
  */
-class VoiceInput(private val context: Context, private val onWake: () -> Unit) {
+class VoiceInput(private val context: Context, private val onError: ((String) -> Unit)? = null, private val onWake: () -> Unit) {
     val wakePhrase = WakePhrases.find(com.maaz.apna.Settings(context).wakePhraseId)
 
     private val main = Handler(Looper.getMainLooper())
@@ -62,6 +62,9 @@ class VoiceInput(private val context: Context, private val onWake: () -> Unit) {
     /** Set by [release]; a model load still in progress must not bring the microphone back. */
     @Volatile private var released = false
     private var thread: Thread? = null
+    @Volatile private var activeRecord: AudioRecord? = null
+    val health = MicrophoneHealth()
+    fun diagnosticSummary(): String = if (!hasWakeWord) "Wake model not loaded. Check the wake download in Settings." else health.summary(android.os.SystemClock.elapsedRealtime())
 
     /** While true, microphone audio is ignored (Friday is talking and mustn't hear itself). */
     @Volatile var muted = false
@@ -207,8 +210,7 @@ class VoiceInput(private val context: Context, private val onWake: () -> Unit) {
             }
             if (released) {
                 // Turned off while loading: free what was just loaded and stay quiet.
-                spotter?.release(); spotter = null
-                recognizer?.release(); recognizer = null
+                releaseNativeModels()
                 return@Thread
             }
             main.post { if (!released) ready(errors.firstOrNull()) }
@@ -218,6 +220,11 @@ class VoiceInput(private val context: Context, private val onWake: () -> Unit) {
     /** Opens the microphone and starts listening (for the wake word, and for commands when asked). */
     fun start() {
         if (released || running || (spotter == null && recognizer == null)) return
+        if (thread?.isAlive == true) {
+            health.failed("Previous microphone session has not stopped. Turn Friday off and reopen it.")
+            return
+        }
+        health.starting(android.os.SystemClock.elapsedRealtime())
         running = true
         thread = Thread({ loop() }, "apna-mic").apply { start() }
     }
@@ -225,14 +232,22 @@ class VoiceInput(private val context: Context, private val onWake: () -> Unit) {
     /** Closes the microphone (e.g. so Google's recognizer can use it). */
     fun stop() {
         running = false
+        runCatching { activeRecord?.stop() } // Unblock a pending read before handing the mic to STT.
         thread?.let { if (it !== Thread.currentThread()) it.join(1500) }
-        thread = null
+        if (thread?.isAlive != true) thread = null
+        health.stopped()
     }
 
     fun release() {
         released = true
         stop()
         cancelCommand()
+        val old = thread
+        if (old?.isAlive == true) Thread { old.join(); releaseNativeModels() }.start()
+        else releaseNativeModels()
+    }
+
+    @Synchronized private fun releaseNativeModels() {
         spotter?.release(); spotter = null
         recognizer?.release(); recognizer = null
     }
@@ -269,6 +284,8 @@ class VoiceInput(private val context: Context, private val onWake: () -> Unit) {
     private fun loop() {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             Log.w(TAG, "no microphone permission")
+            health.failed("Microphone permission is missing.")
+            main.post { if (!released) onError?.invoke("Microphone permission is missing.") }
             running = false
             return
         }
@@ -279,22 +296,30 @@ class VoiceInput(private val context: Context, private val onWake: () -> Unit) {
             val minBuf = AudioRecord.getMinBufferSize(SAMPLE_RATE, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT)
             // The "voice call" source switches on the phone's echo cancellation, so Friday's own voice
             // is largely removed from what the microphone hears and the user can talk over it.
-            val source = if (echoCancellation) MediaRecorder.AudioSource.VOICE_COMMUNICATION else MediaRecorder.AudioSource.VOICE_RECOGNITION
+            // Standby is keyword recognition: call-mode suppression can remove quiet/far-field speech.
+            val useEchoCancellation = echoCancellation && canTranscribe
+            val source = if (useEchoCancellation) MediaRecorder.AudioSource.VOICE_COMMUNICATION else MediaRecorder.AudioSource.VOICE_RECOGNITION
             record = AudioRecord(
                 source, SAMPLE_RATE,
                 AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, maxOf(minBuf, SAMPLE_RATE / 5 * 2),
             )
-            if (echoCancellation) echoCanceller = runCatching {
+            activeRecord = record
+            check(record.state == AudioRecord.STATE_INITIALIZED) { "Audio input could not initialize. Another app may be using the mic." }
+            if (useEchoCancellation) echoCanceller = runCatching {
                 if (AcousticEchoCanceler.isAvailable()) AcousticEchoCanceler.create(record.audioSessionId)?.apply { enabled = true } else null
             }.getOrNull()
             record.startRecording()
+            check(record.recordingState == AudioRecord.RECORDSTATE_RECORDING) { "Android did not start microphone recording." }
             val pcm = ShortArray(SAMPLE_RATE / 10) // 100 ms
             while (running) {
                 val n = record.read(pcm, 0, pcm.size)
-                if (n <= 0) { if (n < 0) Thread.sleep(20); continue }
+                if (!running) break
+                check(n >= 0) { "Audio input failed ($n). Check microphone privacy and other recording apps." }
+                if (n == 0) { Thread.sleep(10); continue }
                 if (muted) { level = 0f; continue }
                 val samples = FloatArray(n) { pcm[it] / 32768f }
                 val rawLevel = rms(samples)
+                health.frame(android.os.SystemClock.elapsedRealtime(), rawLevel)
                 applyGain(samples, rawLevel)
                 val level = rawLevel * gain
                 this.level = (level * 8).coerceAtMost(1f)
@@ -329,6 +354,7 @@ class VoiceInput(private val context: Context, private val onWake: () -> Unit) {
                     while (kws.isReady(stream)) {
                         kws.decode(stream)
                         if (kws.getResult(stream).keyword.isNotBlank()) {
+                            health.detected(android.os.SystemClock.elapsedRealtime())
                             kws.reset(stream)
                             synchronized(lock) {
                                 afterWake.clear()
@@ -344,10 +370,18 @@ class VoiceInput(private val context: Context, private val onWake: () -> Unit) {
                 }
             }
         } catch (e: Throwable) {
-            Log.e(TAG, "microphone loop failed", e)
+            if (running && !released) {
+                val message = e.message ?: "Microphone input failed."
+                health.failed(message)
+                main.post { if (!released) onError?.invoke(message) }
+                Log.e(TAG, "microphone loop failed", e)
+            }
             val session = synchronized(lock) { command.also { command = null } }
             session?.let { s -> main.post { s.onResult(null) } }
         } finally {
+            running = false
+            health.stopped()
+            if (activeRecord === record) activeRecord = null
             runCatching { record?.stop() }
             record?.release()
             echoCanceller?.release()

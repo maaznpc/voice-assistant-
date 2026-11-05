@@ -3,6 +3,17 @@
 
 
 
+
+## Friday 0.4.0 — Wake / Deepgram / latency
+
+- `./gradlew assembleDebug testDebugUnitTest lintDebug --no-daemon`: **BUILD SUCCESSFUL**. **79 tests passed**, zero failures/errors. Lint: **zero errors, 49 warnings**.
+- New regression coverage checks Deepgram Token authentication, WAV body, `/v1/listen` and nested transcript decoding; separation/preservation of legacy Deepgram profiles; normalized complete endpoints and proxy prefixes; microphone failure/stall health; bounded turn timing and click rejection; cancellation during the activation cue; HTTP connection reuse across dialogue sessions; and the pinned bundled neural-VAD model hash.
+- `apksigner` verified the APK. `aapt` confirmed Friday, version `0.4.0-friday`/6, package `com.maaz.apna`, minimum API 26 and ARM64. APK inspection verified the 643,854-byte Silero model SHA-256 and its packaged MIT notice. The updated Settings render was visually inspected.
+- Native sherpa-onnx 1.13.8 synthetic wake checks produced 6/10 positive hits and 3/15 near-sound confusions under baseline settings. Changing threshold .2 → .1 did not improve the set, so the keyword threshold was retained. This is a synthetic regression probe, **not** a physical false-accept/reject measurement.
+- Native Silero VAD detected speech in six synthesized speech/quiet-speech clips and none in the silence/seeded steady-noise clips. These desktop tests do not measure Android microphone behavior, field noise, battery use or Android CPU load.
+- Local APK: `artifacts/Friday-0.4.0-debug.apk`, 28630500 bytes; SHA-256 `123afb05398e2b730611d9c377cae6b9ba43008cd9086e8e000a50c0ebd7b486`. CI artifacts may differ in hash and signing key.
+- `adb devices` reported no attached phone; no live API key was available. Actual wake reliability, live Deepgram/model access, provider latency and the user's exact 404 remain unverified. See [evidence and remaining checks](RELIABILITY_0_4.md). The user confirmed Deepgram but did not supply the exact failed URL/message or stage.
+
 ## Friday 0.3.2 — Thinking Skills
 
 - Imported all 20 original Codex skill folders from `SaulBurgos/thinking-skills` commit `f99b1b2b22d639de5103dbeefd59c9ecdf46b1ef` into `.agents/skills/`. Compared all 55 files in those folders byte-for-byte against the source; supporting files are intact. Upstream README and MIT license are also retained.

@@ -240,6 +240,17 @@
             android:id="@+id/ttsSettings" style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Open text-to-speech settings" tools:ignore="HardcodedText" />
 
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Apna.Field" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:layout_marginTop="12dp" android:hint="Deepgram speech API key (optional)" tools:ignore="HardcodedText">
+            <com.google.android.material.textfield.TextInputEditText android:id="@+id/deepgramKey"
+                android:layout_width="match_parent" android:layout_height="wrap_content"
+                android:inputType="textPassword" android:singleLine="true" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:textColor="@color/text_dim" android:textSize="12sp" tools:ignore="HardcodedText"
+            android:text="Deepgram transcribes your activated speech using its Whisper model with automatic language detection. Add a separate Groq/Gemini dialogue model for replies and phone actions. Your Deepgram credits apply. Clear this key to use your dialogue provider for speech. Old custom Deepgram credentials are shown here automatically." />
+
         <!-- Wake word -->
         <TextView
             style="@style/Apna.Section"

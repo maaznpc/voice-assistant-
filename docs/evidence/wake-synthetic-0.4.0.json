@@ -1,0 +1,458 @@
+{
+  "2/0.2": [
+    {
+      "case": "slt-wake",
+      "positive": true,
+      "detected": true,
+      "seconds": 0.04
+    },
+    {
+      "case": "slt-wake-quiet",
+      "positive": true,
+      "detected": true,
+      "seconds": 0.039
+    },
+    {
+      "case": "slt-day",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.036
+    },
+    {
+      "case": "slt-near",
+      "positive": false,
+      "detected": true,
+      "seconds": 0.035
+    },
+    {
+      "case": "slt-command",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.052
+    },
+    {
+      "case": "rms-wake",
+      "positive": true,
+      "detected": true,
+      "seconds": 0.032
+    },
+    {
+      "case": "rms-wake-quiet",
+      "positive": true,
+      "detected": true,
+      "seconds": 0.031
+    },
+    {
+      "case": "rms-day",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.04
+    },
+    {
+      "case": "rms-near",
+      "positive": false,
+      "detected": true,
+      "seconds": 0.029
+    },
+    {
+      "case": "rms-command",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.057
+    },
+    {
+      "case": "awb-wake",
+      "positive": true,
+      "detected": true,
+      "seconds": 0.031
+    },
+    {
+      "case": "awb-wake-quiet",
+      "positive": true,
+      "detected": true,
+      "seconds": 0.032
+    },
+    {
+      "case": "awb-day",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.039
+    },
+    {
+      "case": "awb-near",
+      "positive": false,
+      "detected": true,
+      "seconds": 0.032
+    },
+    {
+      "case": "awb-command",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.05
+    },
+    {
+      "case": "kal-wake",
+      "positive": true,
+      "detected": false,
+      "seconds": 0.035
+    },
+    {
+      "case": "kal-wake-quiet",
+      "positive": true,
+      "detected": false,
+      "seconds": 0.04
+    },
+    {
+      "case": "kal-day",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.043
+    },
+    {
+      "case": "kal-near",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.035
+    },
+    {
+      "case": "kal-command",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.047
+    },
+    {
+      "case": "kal16-wake",
+      "positive": true,
+      "detected": false,
+      "seconds": 0.037
+    },
+    {
+      "case": "kal16-wake-quiet",
+      "positive": true,
+      "detected": false,
+      "seconds": 0.036
+    },
+    {
+      "case": "kal16-day",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.045
+    },
+    {
+      "case": "kal16-near",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.034
+    },
+    {
+      "case": "kal16-command",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.05
+    }
+  ],
+  "2/0.1": [
+    {
+      "case": "slt-wake",
+      "positive": true,
+      "detected": true,
+      "seconds": 0.045
+    },
+    {
+      "case": "slt-wake-quiet",
+      "positive": true,
+      "detected": true,
+      "seconds": 0.037
+    },
+    {
+      "case": "slt-day",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.039
+    },
+    {
+      "case": "slt-near",
+      "positive": false,
+      "detected": true,
+      "seconds": 0.03
+    },
+    {
+      "case": "slt-command",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.051
+    },
+    {
+      "case": "rms-wake",
+      "positive": true,
+      "detected": true,
+      "seconds": 0.055
+    },
+    {
+      "case": "rms-wake-quiet",
+      "positive": true,
+      "detected": true,
+      "seconds": 0.035
+    },
+    {
+      "case": "rms-day",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.077
+    },
+    {
+      "case": "rms-near",
+      "positive": false,
+      "detected": true,
+      "seconds": 0.034
+    },
+    {
+      "case": "rms-command",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.073
+    },
+    {
+      "case": "awb-wake",
+      "positive": true,
+      "detected": true,
+      "seconds": 0.046
+    },
+    {
+      "case": "awb-wake-quiet",
+      "positive": true,
+      "detected": true,
+      "seconds": 0.047
+    },
+    {
+      "case": "awb-day",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.048
+    },
+    {
+      "case": "awb-near",
+      "positive": false,
+      "detected": true,
+      "seconds": 0.035
+    },
+    {
+      "case": "awb-command",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.063
+    },
+    {
+      "case": "kal-wake",
+      "positive": true,
+      "detected": false,
+      "seconds": 0.048
+    },
+    {
+      "case": "kal-wake-quiet",
+      "positive": true,
+      "detected": false,
+      "seconds": 0.054
+    },
+    {
+      "case": "kal-day",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.067
+    },
+    {
+      "case": "kal-near",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.059
+    },
+    {
+      "case": "kal-command",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.063
+    },
+    {
+      "case": "kal16-wake",
+      "positive": true,
+      "detected": false,
+      "seconds": 0.044
+    },
+    {
+      "case": "kal16-wake-quiet",
+      "positive": true,
+      "detected": false,
+      "seconds": 0.034
+    },
+    {
+      "case": "kal16-day",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.05
+    },
+    {
+      "case": "kal16-near",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.051
+    },
+    {
+      "case": "kal16-command",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.065
+    }
+  ],
+  "3/0.1": [
+    {
+      "case": "slt-wake",
+      "positive": true,
+      "detected": true,
+      "seconds": 0.043
+    },
+    {
+      "case": "slt-wake-quiet",
+      "positive": true,
+      "detected": true,
+      "seconds": 0.035
+    },
+    {
+      "case": "slt-day",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.04
+    },
+    {
+      "case": "slt-near",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.031
+    },
+    {
+      "case": "slt-command",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.048
+    },
+    {
+      "case": "rms-wake",
+      "positive": true,
+      "detected": true,
+      "seconds": 0.032
+    },
+    {
+      "case": "rms-wake-quiet",
+      "positive": true,
+      "detected": true,
+      "seconds": 0.031
+    },
+    {
+      "case": "rms-day",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.046
+    },
+    {
+      "case": "rms-near",
+      "positive": false,
+      "detected": true,
+      "seconds": 0.031
+    },
+    {
+      "case": "rms-command",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.055
+    },
+    {
+      "case": "awb-wake",
+      "positive": true,
+      "detected": true,
+      "seconds": 0.037
+    },
+    {
+      "case": "awb-wake-quiet",
+      "positive": true,
+      "detected": true,
+      "seconds": 0.033
+    },
+    {
+      "case": "awb-day",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.038
+    },
+    {
+      "case": "awb-near",
+      "positive": false,
+      "detected": true,
+      "seconds": 0.038
+    },
+    {
+      "case": "awb-command",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.055
+    },
+    {
+      "case": "kal-wake",
+      "positive": true,
+      "detected": false,
+      "seconds": 0.039
+    },
+    {
+      "case": "kal-wake-quiet",
+      "positive": true,
+      "detected": false,
+      "seconds": 0.039
+    },
+    {
+      "case": "kal-day",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.046
+    },
+    {
+      "case": "kal-near",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.038
+    },
+    {
+      "case": "kal-command",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.056
+    },
+    {
+      "case": "kal16-wake",
+      "positive": true,
+      "detected": false,
+      "seconds": 0.042
+    },
+    {
+      "case": "kal16-wake-quiet",
+      "positive": true,
+      "detected": false,
+      "seconds": 0.043
+    },
+    {
+      "case": "kal16-day",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.051
+    },
+    {
+      "case": "kal16-near",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.043
+    },
+    {
+      "case": "kal16-command",
+      "positive": false,
+      "detected": false,
+      "seconds": 0.058
+    }
+  ]
+}

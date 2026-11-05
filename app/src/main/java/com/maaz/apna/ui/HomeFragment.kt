@@ -20,6 +20,13 @@ class HomeFragment : Fragment() {
     private var _ui: FragmentHomeBinding? = null
     private val ui get() = _ui!!
     private lateinit var settings: Settings
+    private val diagnosticRefresh = object : Runnable {
+        override fun run() {
+            if (_ui == null) return
+            refreshDiagnostics()
+            ui.root.postDelayed(this, 500)
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, state: Bundle?): View {
         _ui = FragmentHomeBinding.inflate(inflater, container, false)
@@ -59,6 +66,8 @@ class HomeFragment : Fragment() {
         super.onResume()
         if (_ui == null) return
         ui.reactor.animate = true
+        ui.root.removeCallbacks(diagnosticRefresh)
+        ui.root.post(diagnosticRefresh)
         ApnaService.statusListener = { if (_ui != null) refresh() }
         refresh()
     }
@@ -66,11 +75,17 @@ class HomeFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         ApnaService.statusListener = null
+        _ui?.root?.removeCallbacks(diagnosticRefresh)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _ui = null
+    }
+
+    private fun refreshDiagnostics() {
+        ui.wakeDiagnostics.visibility = if (ApnaService.running && ApnaService.phase == Phase.IDLE) View.VISIBLE else View.GONE
+        ui.wakeDiagnostics.text = listOfNotNull(ApnaService.wakeDiagnostics(), ApnaService.lastTiming).joinToString("\n")
     }
 
     private fun refresh() {
@@ -85,11 +100,12 @@ class HomeFragment : Fragment() {
         }
         ui.statusLabel.text = when (phase) {
             Phase.OFF -> "Off"
-            Phase.IDLE -> "Ready"
+            Phase.IDLE -> if (ApnaService.status.startsWith("Wake microphone error:")) "Mic issue" else "Ready"
             Phase.LISTENING -> "Listening"
             Phase.WORKING -> "Working"
         }
         ui.statusText.text = if (running) ApnaService.status else "Turn Friday on to start listening"
+        refreshDiagnostics()
         val last = ApnaService.lastResult
         ui.lastResult.visibility = if (last != null && phase != Phase.WORKING) View.VISIBLE else View.GONE
         ui.lastResult.text = "Last task: $last"

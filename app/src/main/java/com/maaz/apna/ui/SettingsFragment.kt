@@ -60,6 +60,7 @@ class SettingsFragment : Fragment() {
         ui.previewButton.setOnClickListener { previewVoice() }
         showVoiceSection()
 
+        ui.deepgramKey.setText(settings.deepgramKey)
         ui.ttsSettings.setOnClickListener {
             runCatching { startActivity(Intent("com.android.settings.TTS_SETTINGS")) }
                 .onFailure { Toast.makeText(requireContext(), "Open Android Settings and search Text-to-speech.", Toast.LENGTH_LONG).show() }
@@ -106,7 +107,7 @@ class SettingsFragment : Fragment() {
         ui.screenshotSwitch.setOnCheckedChangeListener { _, v -> settings.allowScreenshots = v }
 
         ui.openSource.setOnClickListener {
-            val license = listOf("legal/LICENSE.txt", "legal/THINKING_SKILLS_LICENSE.txt").joinToString("\n\n") { path ->
+            val license = listOf("legal/LICENSE.txt", "legal/THINKING_SKILLS_LICENSE.txt", "legal/SILERO_VAD_LICENSE.txt").joinToString("\n\n") { path ->
                 requireContext().assets.open(path).bufferedReader().use { it.readText() }
             }
             com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
@@ -133,6 +134,7 @@ class SettingsFragment : Fragment() {
         if (_ui == null) return
         if (settings.voiceEngine == "kokoro") Kokoro.prerender(requireContext(), settings.kokoroSpeaker, settings.voiceSpeed)
         saveCloudFields()
+        settings.deepgramKey = ui.deepgramKey.text.toString()
         settings.sleepTimeoutSeconds = ui.sleepTimeout.text.toString().toIntOrNull() ?: 15
         settings.personalNotes = ui.notes.text.toString()
         settings.maxSteps = ui.maxSteps.text.toString().toIntOrNull()?.coerceIn(5, 200) ?: 40

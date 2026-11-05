@@ -13,19 +13,21 @@ import com.maaz.apna.Settings
 
 /** System speech recognition only after activation; wake detection remains local. Main thread only. */
 class CommandListener(private val context: Context) {
-    private val cloud = ActiveAudioRecognizer()
+    private val cloud = ActiveAudioRecognizer(context.applicationContext)
     private val main = Handler(Looper.getMainLooper())
     private var recognizer: SpeechRecognizer? = null
     private var generation = 0
     var lastError: String? = null
         private set
 
+    fun timingSummary(): String = if (cloud.captureMs > 0) "Capture ${cloud.captureMs}ms · STT ${cloud.transcriptionMs}ms" else "Android speech"
+
     fun listen(onResult: (String?) -> Unit) = listen(10_000L, onResult)
 
     fun listen(timeoutMs: Long, onResult: (String?) -> Unit) {
         cancel()
         lastError = null
-        val primary = Settings(context).primary()
+        val primary = Settings(context).speechProfile()
         if (CloudTranscriber.supports(primary)) {
             cloud.listen(primary!!, timeoutMs) { text, error -> lastError = error; onResult(text) }
             return

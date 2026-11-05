@@ -25,7 +25,7 @@ val PROVIDERS = listOf(
     ProviderPreset("ollama", "Ollama (local)", ApiKind.OPENAI_COMPATIBLE, "http://192.168.1.100:11434/v1", "qwen2.5:14b", false),
     ProviderPreset("openrouter", "OpenRouter", ApiKind.OPENAI_COMPATIBLE, "https://openrouter.ai/api/v1", "anthropic/claude-opus-5-5", true),
     ProviderPreset("gemini", "Google Gemini", ApiKind.OPENAI_COMPATIBLE, "https://generativelanguage.googleapis.com/v1beta/openai", "gemini-2.5-flash", true),
-    ProviderPreset("groq", "Groq", ApiKind.OPENAI_COMPATIBLE, "https://api.groq.com/openai/v1", "llama-3.3-70b-versatile", true),
+    ProviderPreset("groq", "Groq", ApiKind.OPENAI_COMPATIBLE, "https://api.groq.com/openai/v1", "openai/gpt-oss-20b", true),
     ProviderPreset("custom", "Custom (OpenAI-compatible)", ApiKind.OPENAI_COMPATIBLE, "http://localhost:8080/v1", "", false),
 )
 
@@ -119,6 +119,17 @@ class Settings(context: Context) {
         get() = prefs.getBoolean("onboarded", false)
         set(v) = prefs.edit().putBoolean("onboarded", v).apply()
 
+    /** Explicit speech credential; old custom Deepgram profiles remain intact and supply a key. */
+    var deepgramKey: String
+        get() = if (prefs.contains("deepgram_key")) prefs.getString("deepgram_key", "").orEmpty()
+            else profiles().firstOrNull { ApiEndpoints.speechOnly(it) }?.apiKey.orEmpty()
+        set(value) = prefs.edit().putString("deepgram_key", value.trim()).apply()
+
+    fun speechProfile(): ModelProfile? = deepgramKey.takeIf { it.isNotBlank() }?.let {
+        ModelProfile(id = "deepgram-speech", name = "Deepgram speech", providerId = "deepgram",
+            baseUrl = "https://api.deepgram.com/v1", apiKey = it, model = "whisper-large")
+    } ?: primary()?.takeIf { com.maaz.apna.voice.CloudTranscriber.supports(it) }
+
     // ---- Models ----
 
     /** Try the next saved model if the primary one fails mid-task. */
@@ -133,14 +144,14 @@ class Settings(context: Context) {
     }
 
     var primaryId: String?
-        get() = prefs.getString("primary", null)?.takeIf { id -> profiles().any { it.id == id } } ?: profiles().firstOrNull()?.id
+        get() = prefs.getString("primary", null)?.takeIf { id -> profiles().any { it.id == id && !ApiEndpoints.speechOnly(it) } } ?: profiles().firstOrNull { !ApiEndpoints.speechOnly(it) }?.id
         set(v) = prefs.edit().putString("primary", v).apply()
 
-    fun primary(): ModelProfile? = profiles().let { all -> all.firstOrNull { it.id == primaryId } ?: all.firstOrNull() }
+    fun primary(): ModelProfile? = profiles().filterNot { ApiEndpoints.speechOnly(it) }.let { all -> all.firstOrNull { it.id == primaryId } ?: all.firstOrNull() }
 
     /** Primary first, then the others in the order they were added. */
     fun modelsInOrder(): List<ModelProfile> {
-        val all = profiles()
+        val all = profiles().filterNot { ApiEndpoints.speechOnly(it) }
         val p = primary() ?: return all
         return listOf(p) + all.filter { it.id != p.id }
     }

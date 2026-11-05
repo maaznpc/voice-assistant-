@@ -105,6 +105,11 @@ class ModelEditActivity : AppCompatActivity() {
 
     private fun test() {
         val profile = current() ?: return
+        if (com.maaz.apna.ApiEndpoints.speechOnly(profile)) {
+            ui.testResult.visibility = View.VISIBLE
+            ui.testResult.text = "Deepgram speech credentials are available in Settings. Add a dialogue provider such as Groq/Gemini for this connection test."
+            return
+        }
         ui.testButton.isEnabled = false
         ui.testButton.text = "Testing…"
         ui.testResult.visibility = View.GONE
@@ -154,8 +159,8 @@ class ModelEditActivity : AppCompatActivity() {
             "ollama" to "On your computer, start Ollama with OLLAMA_HOST=0.0.0.0 so the phone can reach it, then enter your computer's IP address below. Use a model that supports tool calling.",
             "openrouter" to "Get an API key at openrouter.ai/keys. Use any model ID listed on the site.",
             "gemini" to "Get an API key at aistudio.google.com → Get API key.",
-            "groq" to "Get an API key at console.groq.com/keys.",
-            "custom" to "Any server with an OpenAI-compatible /chat/completions endpoint and tool calling.",
+            "groq" to "Get an API key at console.groq.com/keys. The fast default is openai/gpt-oss-20b; old Llama defaults are retired for free/developer accounts.",
+            "custom" to "An OpenAI-compatible dialogue server with tool calling. Deepgram speech keys go in Settings → Deepgram speech, not here.",
         )
     }
 }

@@ -79,7 +79,8 @@ class ApnaService : Service() {
         listOf("vosk-model", "kws.old").forEach { java.io.File(filesDir, it).takeIf { f -> f.exists() }?.deleteRecursively() }
         settings = Settings(this)
         speaker = Speaker(this)
-        voice = VoiceInput(this) { onWakeWord() }
+        voice = VoiceInput(this, onError = { message -> if (!destroyed) update("Wake microphone error: $message") }) { onWakeWord() }
+        diagnosticInput = voice
         google = CommandListener(this)
         createChannel()
         try {
@@ -136,6 +137,7 @@ class ApnaService : Service() {
 
     override fun onDestroy() {
         destroyed = true
+        diagnosticInput = null
         listeningGeneration++
         main.removeCallbacks(renewWakeLock)
         listenerWakeLock?.let { if (it.isHeld) it.release() }
@@ -278,7 +280,15 @@ class ApnaService : Service() {
                 if (!destroyed && generation == listeningGeneration) onHeard(text, followUp)
             }
             val timeout = if (followUp) ConversationControl.timeoutMs(settings.sleepTimeoutSeconds) else 10_000L
-            if (followUp) google.listen(timeout, heard) else say("I am listening.") { google.listen(timeout, heard) }
+            if (followUp) google.listen(timeout, heard) else {
+                // A short cue avoids waiting for TTS initialization and a spoken acknowledgement.
+                val tone = runCatching { android.media.ToneGenerator(android.media.AudioManager.STREAM_MUSIC, 35) }.getOrNull()
+                runCatching { tone?.startTone(android.media.ToneGenerator.TONE_PROP_ACK, 60) }
+                main.postDelayed({
+                    runCatching { tone?.release() }
+                    if (!destroyed && generation == listeningGeneration && state == State.LISTENING_COMMAND) google.listen(timeout, heard)
+                }, 100)
+            }
         }
     }
 
@@ -290,12 +300,16 @@ class ApnaService : Service() {
             interrupted && text != null && VoiceInput.words(text).size <= 1 && !VoiceInput.isStopCommand(text) ->
                 listen(promptIfQuiet = false, followUp = true)
             text.isNullOrBlank() && followUp -> {
+                val error = google.lastError
                 enterStandby()
+                if (error != null) { lastResult = error; update(error) }
             }
             text.isNullOrBlank() -> {
                 state = State.IDLE
-                update(google.lastError ?: "Didn't catch that")
-                say("Sorry, I didn't catch that.", interruptible = true) { island { it.hide() }; resumeListening() }
+                val error = google.lastError
+                if (error != null) lastResult = error
+                update(error ?: "Didn't catch that")
+                say(if (error != null) "The speech service failed. Check the error on Home." else "Sorry, I didn't catch that.", interruptible = true) { island { it.hide() }; resumeListening() }
             }
             ConversationControl.isSleep(text) -> enterStandby()
             VoiceInput.isStopCommand(text) -> {
@@ -304,7 +318,7 @@ class ApnaService : Service() {
                 update("Okay")
                 resumeListening()
             }
-            else -> runTask(text)
+            else -> runTask(text, fromVoice = true)
         }
     }
 
@@ -323,7 +337,7 @@ class ApnaService : Service() {
         resumeListening()
     }
 
-    private fun runTask(task: String) {
+    private fun runTask(task: String, fromVoice: Boolean = false) {
         if (ConversationControl.isSleep(task)) { enterStandby(); return }
         if (destroyed || state == State.WORKING) return
         listeningGeneration++
@@ -340,6 +354,8 @@ class ApnaService : Service() {
         update("Working on: $task")
         // Start thinking immediately; unnecessary acknowledgement adds delay.
         val earlier = recentConversation()
+        val taskStarted = android.os.SystemClock.elapsedRealtime()
+        val speechTiming = if (fromVoice) google.timingSummary() else "Typed"
         worker.execute {
             val result = try {
                 PhoneAgent(settings, hostFor(id)).run(task, earlier)
@@ -350,6 +366,7 @@ class ApnaService : Service() {
             main.post {
                 if (id != taskId || destroyed) return@post // interrupted by a newer command
                 lastResult = result.summary
+                lastTiming = "$speechTiming · Task ${android.os.SystemClock.elapsedRealtime() - taskStarted}ms"
                 remember(task, result.summary)
                 island { it.finish(result.success, result.summary) }
                 update(result.summary)
@@ -364,7 +381,7 @@ class ApnaService : Service() {
     /** After a reply: listen for a follow-up without the wake word, or go back to waiting. */
     private fun afterReply() {
         if (destroyed) return
-        if (settings.followUp && (voice.canTranscribe || (com.maaz.apna.voice.CloudTranscriber.supports(settings.primary()) || android.speech.SpeechRecognizer.isRecognitionAvailable(this)))) listen(promptIfQuiet = false, followUp = true)
+        if (settings.followUp && (voice.canTranscribe || (com.maaz.apna.voice.CloudTranscriber.supports(settings.speechProfile()) || android.speech.SpeechRecognizer.isRecognitionAvailable(this)))) listen(promptIfQuiet = false, followUp = true)
         else enterStandby()
     }
 
@@ -521,15 +538,19 @@ class ApnaService : Service() {
             private set
         @Volatile var status = "Off"
             private set
+        @Volatile var lastTiming: String? = null
+            private set
         @Volatile var lastTask: String? = null
             private set
         @Volatile var lastResult: String? = null
             private set
         @androidx.annotation.VisibleForTesting
-        fun resetForTest() { lastTask = null; lastResult = null; status = "Off"; phase = Phase.OFF }
+        fun resetForTest() { diagnosticInput = null; lastTiming = null; lastTask = null; lastResult = null; status = "Off"; phase = Phase.OFF }
 
         /** Set by the visible activity to mirror status changes. Called on the main thread. */
         var statusListener: ((String) -> Unit)? = null
+        @Volatile private var diagnosticInput: VoiceInput? = null
+        fun wakeDiagnostics(): String = diagnosticInput?.diagnosticSummary() ?: "Wake listener is off"
 
         /** Returns false if Friday can't start yet because microphone permission is missing. */
         fun start(context: Context, action: String? = null, task: String? = null): Boolean {

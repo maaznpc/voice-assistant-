@@ -1,5 +1,13 @@
 # Changes
 
+## 0.4.0-friday
+
+- Added Deepgram speech credentials and native Listen API support; retained existing custom profiles and excluded speech-only endpoints from dialogue routing.
+- Added endpoint normalization, actionable speech/dialogue errors and an updated fast Groq preset.
+- Fixed wake microphone failure reporting, stopped-read handling and recognition/call audio routing; exposed live wake input health on Home.
+- Added a short activation cue, 900 ms endpoint silence, bundled local Silero VAD with energy fallback, shared dialogue connections and capture/STT/task timings.
+- Added native synthetic wake evidence and reproducible tooling; physical wake and live API behavior remain unverified.
+
 ## 0.3.2-friday
 
 - Installed all 20 original MIT thinking-skills folders as repo-local Codex skills, with supporting files and source attribution.

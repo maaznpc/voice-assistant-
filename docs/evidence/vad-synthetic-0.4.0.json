@@ -1,0 +1,50 @@
+[
+  {
+    "case": "slt",
+    "speech_frames": 93,
+    "seconds": 0.011,
+    "audio_seconds": 2.33
+  },
+  {
+    "case": "slt-quiet",
+    "speech_frames": 91,
+    "seconds": 0.008,
+    "audio_seconds": 2.33
+  },
+  {
+    "case": "rms",
+    "speech_frames": 112,
+    "seconds": 0.009,
+    "audio_seconds": 2.595
+  },
+  {
+    "case": "rms-quiet",
+    "speech_frames": 110,
+    "seconds": 0.012,
+    "audio_seconds": 2.595
+  },
+  {
+    "case": "awb",
+    "speech_frames": 104,
+    "seconds": 0.009,
+    "audio_seconds": 2.365
+  },
+  {
+    "case": "awb-quiet",
+    "speech_frames": 104,
+    "seconds": 0.01,
+    "audio_seconds": 2.365
+  },
+  {
+    "case": "silence",
+    "speech_frames": 0,
+    "seconds": 0.007,
+    "audio_seconds": 2.0
+  },
+  {
+    "case": "steady-noise",
+    "speech_frames": 0,
+    "seconds": 0.007,
+    "audio_seconds": 2.0
+  }
+]

@@ -1,6 +1,7 @@
 package com.maaz.apna.voice
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
@@ -18,22 +19,28 @@ import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.sqrt
 
 /** Short in-memory WAV after activation. No files, recordings, or uploads during standby. */
-class ActiveAudioRecognizer {
+class ActiveAudioRecognizer(private val context: Context) {
     private val main = Handler(Looper.getMainLooper())
     private val worker = Executors.newSingleThreadExecutor { r -> Thread(r, "friday-active-audio").apply { isDaemon = true } }
     private val generation = AtomicInteger()
     private val transcriber = CloudTranscriber(OkHttpClient.Builder().connectTimeout(10, TimeUnit.SECONDS).readTimeout(25, TimeUnit.SECONDS).callTimeout(25, TimeUnit.SECONDS).build())
     @Volatile private var recorder: AudioRecord? = null
     @Volatile private var call: Call? = null
+    @Volatile var captureMs = 0L
+        private set
+    @Volatile var transcriptionMs = 0L
+        private set
 
     @SuppressLint("MissingPermission") // The foreground service checks RECORD_AUDIO before activation.
     fun listen(profile: ModelProfile, timeoutMs: Long, result: (String?, String?) -> Unit) {
         cancel()
         val ticket = generation.get()
+        captureMs = 0; transcriptionMs = 0
         worker.execute {
             val audio = ByteArrayOutputStream()
             var failure: String? = null
             var transcript: String? = null
+            var speechDetector = LocalSpeechDetector.create(context)
             try {
                 val size = AudioRecord.getMinBufferSize(16000, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT)
                 check(size > 0) { "Microphone format is unavailable." }
@@ -44,8 +51,7 @@ class ActiveAudioRecognizer {
                     if (ticket != generation.get()) return@execute
                     rec.startRecording()
                     val start = android.os.SystemClock.elapsedRealtime()
-                    var speechStart = 0L
-                    var lastSpeech = 0L
+                    val detector = SpeechTurnDetector(start, timeoutMs)
                     val buffer = ShortArray(320)
                     // A small pre-roll retains quiet consonants at speech onset.
                     val preRoll = ArrayDeque<ByteArray>()
@@ -57,20 +63,21 @@ class ActiveAudioRecognizer {
                         val bytes = ByteBuffer.allocate(n * 2).order(ByteOrder.LITTLE_ENDIAN)
                         for (i in 0 until n) { power += buffer[i].toDouble() * buffer[i]; bytes.putShort(buffer[i]) }
                         val chunk = bytes.array()
-                        val speech = sqrt(power / n) / 32768.0 >= 0.012
-                        if (speechStart == 0L) {
+                        val wasSpeaking = detector.hasSpeech
+                        if (speechDetector != null) detector.acceptVoice(now, speechDetector.speech(buffer, n))
+                        else detector.accept(now, (sqrt(power / n) / 32768.0).toFloat())
+                        if (!wasSpeaking) {
                             preRoll.addLast(chunk)
                             while (preRoll.size > 15) preRoll.removeFirst()
-                            if (speech) { speechStart = now; lastSpeech = now; preRoll.forEach { audio.write(it) }; preRoll.clear() }
-                            else if (now - start >= timeoutMs.coerceIn(1000, 60000)) break
-                        } else {
-                            audio.write(chunk)
-                            if (speech) lastSpeech = now
-                            if (now - lastSpeech >= 1500 || now - speechStart >= 20000) break
-                        }
+                            if (detector.hasSpeech) { preRoll.forEach { audio.write(it) }; preRoll.clear() }
+                        } else audio.write(chunk)
+                        if (detector.finished) break
+
                     }
+                    captureMs = android.os.SystemClock.elapsedRealtime() - start
                 } finally {
                     runCatching { rec.stop() }; rec.release()
+                    speechDetector?.release(); speechDetector = null
                     if (recorder === rec) recorder = null
                 }
                 if (ticket != generation.get()) return@execute
@@ -78,15 +85,22 @@ class ActiveAudioRecognizer {
                     val request = transcriber.newCall(profile, wav(audio.toByteArray()))
                     call = request
                     if (ticket != generation.get()) { request.cancel(); return@execute }
+                    val requestStart = android.os.SystemClock.elapsedRealtime()
                     request.execute().use { response ->
-                        check(response.isSuccessful) { "Audio transcription failed (${response.code}). Check the primary provider's key, quota and audio-model access." }
+                        check(response.isSuccessful) { "Speech API HTTP ${response.code} from ${profile.name}. " + when (response.code) {
+                            401, 403 -> "Check the speech API key and permissions."
+                            404 -> "Check the speech endpoint and audio model; Deepgram must use /v1/listen."
+                            429 -> "Speech credits or rate limit reached."
+                            else -> "The speech service could not process this command."
+                        } }
                         transcript = transcriber.decode(profile, response.body?.string().orEmpty()).ifBlank { null }
                     }
+                    transcriptionMs = android.os.SystemClock.elapsedRealtime() - requestStart
                 }
             } catch (e: Exception) {
                 if (ticket != generation.get()) return@execute
                 failure = e.message ?: "Automatic speech recognition failed."
-            } finally { audio.reset() }
+            } finally { speechDetector?.release(); audio.reset() }
             main.post { if (ticket == generation.get()) result(transcript, failure) }
         }
     }

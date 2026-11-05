@@ -52,7 +52,7 @@ class PhoneAgent(
                 "\nUse this only to understand what the new request refers to. Don't redo earlier tasks.\n\n"
         val a11y = ApnaAccessibilityService.instance
         val models = settings.modelsInOrder().let { if (settings.fallbackEnabled) it else it.take(1) }
-        if (models.isEmpty()) return AgentResult(false, "No AI model is set up yet. Add one on the Models page in the Friday app.")
+        if (models.isEmpty()) return AgentResult(false, "Add a dialogue model such as Groq or Gemini on the Models page. Deepgram speech credentials belong in Settings and do not configure this app’s dialogue model.")
 
         var lastError = ""
         for ((index, profile) in models.withIndex()) {

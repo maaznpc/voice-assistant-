@@ -1,6 +1,17 @@
 # Validation — 2026-11-05
 
 
+
+## Friday 0.3.1 — Automatic language
+
+- Removed manual language selection; old stored language preferences are ignored. Each request/conversation drives response language and script. Urdu/Roman Urdu/Hinglish are handled without asking the user to classify them.
+- `./gradlew assembleDebug testDebugUnitTest lintDebug --no-daemon`: **BUILD SUCCESSFUL**. **70 tests passed**, zero failures/errors. Lint: **zero errors, 47 warnings**.
+- Additional checks use MockWebServer to validate Gemini inline-audio transcription requests and responses, Groq multipart Whisper transcription without a forced language, configured provider authentication, WAV header/PCM integrity, old preference migration, Android Urdu/Hindi/English hints and script-sensitive TTS routing. All provider responses in these tests are fake.
+- The active microphone capture uses a fixed energy threshold, a 300 ms pre-roll, 1.5 s ending silence and a 20 s speech cap. It keeps audio in memory and uploads only after activation to the configured primary Gemini/Groq/OpenAI provider. Older Android devices can use this path independently of system automatic-language switching. Other providers use Android speech recognition, with service/device limitations.
+- `apksigner` verified the local APK; `aapt` confirmed label Friday, package `com.maaz.apna`, version `0.3.1-friday`/4, minimum API 26 and ARM64. The updated Settings render was visually inspected and contains no language buttons.
+- Local APK: `artifacts/Friday-0.3.1-debug.apk`, 28100024 bytes; SHA-256 `f6140de8c30b9b15f7f47087c5897567bd0ced9907eec3c3001763245b73dc98`. GitHub CI artifacts may differ in hash and signing key.
+- No physical microphone, live API key or phone was available. Real recording/voice activity detection, cancellation during capture, multilingual recognition accuracy, latency, quota, TTS pronunciation and phone installation are unverified. The legacy native offline-English harness is excluded from the normal suite and does not validate this automatic path.
+
 ## Friday 0.3.0 — Urdu and Roman Urdu
 
 - `./gradlew assembleDebug testDebugUnitTest lintDebug --no-daemon`: **BUILD SUCCESSFUL**. **64 tests passed**, zero failures/errors. Lint: **zero errors, 47 warnings** (including two advisory SwitchIntDef warnings for recognition error codes).

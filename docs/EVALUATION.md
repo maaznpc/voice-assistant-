@@ -27,7 +27,7 @@ Get consent for evaluation recordings, keep them out of Git, and delete on reque
 
 ## Multilingual device checks
 
-Select Urdu, Roman Urdu, Hindi or Hinglish in Settings and restart Friday. Keep the local Hey Friday detector enabled. Wait for the prompt, then speak each request in Urdu or mixed English/Urdu. Repeat with the screen locked for ordinary conversation, then unlocked for app actions.
+Language is automatic. Configure Gemini, Groq or OpenAI as the primary model for multilingual audio transcription. Keep the local Hey Friday detector enabled. Wait for the prompt, then speak each request in Urdu or mixed English/Urdu. Repeat with the screen locked for ordinary conversation, then unlocked for app actions.
 
 - Try “WhatsApp کھولو”, “battery kitni hai?”, “mujhe machine learning samjhao” and a follow-up without another wake phrase. Check the actual transcript and reply, rather than relying on success claims.
 - Roman Urdu replies must display Latin letters and speak the same answer from the Urdu-script field. Check native Urdu pronunciation with several speakers.
@@ -35,3 +35,5 @@ Select Urdu, Roman Urdu, Hindi or Hinglish in Settings and restart Friday. Keep 
 - Check unavailable language/network errors, silence timeout, stop during recognition, and missing Urdu TTS data. Missing voice must leave a readable reply and show setup guidance.
 - Android 14+ language switching is a request to the speech service, not a guarantee. Test mixed English names and numbers separately on Pixel 8 and Vivo Y20.
 - Confirm no active recognition runs in standby. System recognition may send activated audio to its provider; ordinary English offline mode remains available.
+
+For automatic recognition, alternate English, Urdu, Roman Urdu (typed) and Hinglish across successive turns without opening Settings. Check that old saved `speech_language` values have no effect. Compare Android service fallback against the cloud path on the older Vivo and verify recording/upload stops on cancellation, timeout and standby. Test room noise and quiet speakers because command capture uses a fixed energy threshold; the in-memory WAV/HTTP tests do not measure microphone accuracy.

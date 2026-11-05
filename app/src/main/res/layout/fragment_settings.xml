@@ -232,13 +232,10 @@
         </com.google.android.material.card.MaterialCardView>
 
         <TextView style="@style/Apna.Section" android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:text="Speech and reply language" tools:ignore="HardcodedText" />
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/languageChips" android:layout_width="match_parent" android:layout_height="wrap_content"
-            app:singleSelection="true" app:selectionRequired="true" />
+            android:text="Automatic language" tools:ignore="HardcodedText" />
         <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="12sp"
             android:textColor="@color/text_dim" tools:ignore="HardcodedText"
-            android:text="Urdu/Roman Urdu and Hindi/Hinglish use your phone’s speech service after wake-up; internet may be required. Wait for the listening prompt before speaking. Install a matching system TTS voice or choose a multilingual cloud voice. Roman replies use native script for speech. Restart Friday after changing language. Talk-over interruption is available in offline English mode; other modes listen again after the reply." />
+            android:text="Speak English, Urdu or Hinglish naturally. Friday matches your language and script automatically. Gemini, Groq or OpenAI as your primary model enables multilingual audio recognition using the same API key; internet and provider quota are required. Other providers use Android speech recognition, whose automatic language support varies by phone. Wait for the listening prompt, then speak. Urdu/Hindi replies need matching system voices or a multilingual cloud voice." />
         <com.google.android.material.button.MaterialButton
             android:id="@+id/ttsSettings" style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Open text-to-speech settings" tools:ignore="HardcodedText" />

@@ -147,7 +147,7 @@ class ApnaService : Service() {
         island { it.hide() }
         if (!startFailed) {
             voice.release()
-            google.cancel()
+            google.shutdown()
             speaker.shutdown()
         }
         worker.shutdownNow()
@@ -278,7 +278,7 @@ class ApnaService : Service() {
                 if (!destroyed && generation == listeningGeneration) onHeard(text, followUp)
             }
             val timeout = if (followUp) ConversationControl.timeoutMs(settings.sleepTimeoutSeconds) else 10_000L
-            if (followUp) google.listen(timeout, heard) else say(if (settings.speechLanguage.locale == "ur-PK") "جی، بولیے؟" else if (settings.speechLanguage.locale == "hi-IN") "जी, बोलिए?" else "Yes?") { google.listen(timeout, heard) }
+            if (followUp) google.listen(timeout, heard) else say("I am listening.") { google.listen(timeout, heard) }
         }
     }
 
@@ -364,7 +364,7 @@ class ApnaService : Service() {
     /** After a reply: listen for a follow-up without the wake word, or go back to waiting. */
     private fun afterReply() {
         if (destroyed) return
-        if (settings.followUp && (voice.canTranscribe || android.speech.SpeechRecognizer.isRecognitionAvailable(this))) listen(promptIfQuiet = false, followUp = true)
+        if (settings.followUp && (voice.canTranscribe || (com.maaz.apna.voice.CloudTranscriber.supports(settings.primary()) || android.speech.SpeechRecognizer.isRecognitionAvailable(this)))) listen(promptIfQuiet = false, followUp = true)
         else enterStandby()
     }
 

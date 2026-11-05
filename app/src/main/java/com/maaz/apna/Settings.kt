@@ -70,9 +70,8 @@ class Settings(context: Context) {
         appContext.assets.open("skills/$name/SKILL.md").bufferedReader().use { it.readText().take(6000) }
     }
 
-    var speechLanguage: com.maaz.apna.voice.SpeechLanguage
-        get() = com.maaz.apna.voice.SpeechLanguage.find(prefs.getString("speech_language", "english"))
-        set(value) = prefs.edit().putString("speech_language", value.id).apply()
+    // Ignore legacy speech_language preferences: language is inferred on every request.
+    val speechLanguage get() = com.maaz.apna.voice.SpeechLanguage.AUTO
 
     var wakePhraseId: String
         get() = com.maaz.apna.voice.WakePhrases.find(prefs.getString("wake_phrase", "friday")!!).id

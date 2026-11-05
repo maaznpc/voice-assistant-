@@ -60,18 +60,13 @@ class SettingsFragment : Fragment() {
         ui.previewButton.setOnClickListener { previewVoice() }
         showVoiceSection()
 
-        com.maaz.apna.voice.SpeechLanguage.entries.forEach { ui.languageChips.addChoice(it.label, it.id) }
-        ui.languageChips.select(settings.speechLanguage.id)
-        ui.languageChips.setOnCheckedStateChangeListener { _, _ ->
-            settings.speechLanguage = com.maaz.apna.voice.SpeechLanguage.find(ui.languageChips.selectedTag)
-        }
         ui.ttsSettings.setOnClickListener {
             runCatching { startActivity(Intent("com.android.settings.TTS_SETTINGS")) }
                 .onFailure { Toast.makeText(requireContext(), "Open Android Settings and search Text-to-speech.", Toast.LENGTH_LONG).show() }
         }
 
         // Wake word
-        refreshers += Setup.bindRows(activity, ui.wakeRow, listOf(Setup.Item.WAKE_WORD, Setup.Item.SPEECH))
+        refreshers += Setup.bindRows(activity, ui.wakeRow, listOf(Setup.Item.WAKE_WORD))
         WakePhrases.all.forEach { ui.wakePhraseChips.addChoice(it.label, it.id) }
         ui.wakePhraseChips.select(settings.wakePhraseId)
         ui.wakePhraseChips.setOnCheckedStateChangeListener { _, _ ->

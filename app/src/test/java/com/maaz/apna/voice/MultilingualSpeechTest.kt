@@ -36,7 +36,6 @@ class MultilingualSpeechTest {
     private fun result(text: String) = Bundle().apply { putStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION, arrayListOf(text)) }
 
     @Test fun selectedUrduServiceDeliversUrduAndMixedCommandsUnchanged() {
-        Settings(context).speechLanguage = SpeechLanguage.ROMAN_URDU
         var heard: String? = null
         val listener = CommandListener(context)
         listener.listen { heard = it }
@@ -107,7 +106,6 @@ class MultilingualSpeechTest {
 
     @Test fun romanDisplayAndUrduSpeechRemainSeparateThroughAgentResult() {
         val settings = Settings(context).apply {
-            speechLanguage = SpeechLanguage.ROMAN_URDU
             saveProfile(ModelProfile(name = "Test", providerId = "custom", baseUrl = "http://localhost", apiKey = "", model = "mock"))
         }
         val host = object : AgentHost {
@@ -117,7 +115,7 @@ class MultilingualSpeechTest {
             override fun ensureUnlocked(): Boolean = error("Conversation needs no phone unlock")
         }
         val agent = PhoneAgent(settings, host) { _, prompt, tools ->
-            assertTrue(prompt.contains("natural Roman Urdu"))
+            assertTrue(prompt.contains("Automatically infer"))
             assertTrue(tools.first { it.name == "finish" }.parameters.getJSONArray("required").toString().contains("spoken_summary"))
             object : ChatSession {
                 override fun send(userText: String?, toolOutputs: List<ToolOutput>) = AssistantTurn("", listOf(ToolCall("done", "finish",

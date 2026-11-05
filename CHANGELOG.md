@@ -1,5 +1,12 @@
 # Changes
 
+## 0.3.1-friday
+
+- Removed language selection. Infer language/script from every request and conversation; ignore old per-language preferences.
+- Added automatic multilingual activated-audio transcription through the configured primary Gemini/Groq/OpenAI API; Android speech recognition remains available for other providers.
+- Added bounded, cancellable in-memory command capture; no recordings saved and no audio upload in standby.
+- Removed the unused English-only command-model download from onboarding/settings.
+
 ## 0.3.0-friday
 
 - Added Urdu, Roman Urdu, Hindi and Hinglish speech/reply settings with Android recognition after activation and optional Android 14+ English switching.

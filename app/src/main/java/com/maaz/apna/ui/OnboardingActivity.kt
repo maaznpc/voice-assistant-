@@ -21,7 +21,7 @@ import com.maaz.apna.service.ApnaService
  */
 class OnboardingActivity : AppCompatActivity() {
 
-    private val DOWNLOADS = listOf(Setup.Item.WAKE_WORD, Setup.Item.SPEECH, Setup.Item.VOICE)
+    private val DOWNLOADS = listOf(Setup.Item.WAKE_WORD)
 
     private enum class Step { WELCOME, MICROPHONE, PHONE_CONTROL, BACKGROUND, DOWNLOADS, MODEL, DONE }
 
@@ -118,8 +118,8 @@ class OnboardingActivity : AppCompatActivity() {
             Step.DOWNLOADS -> {
                 val downloading = Downloads.progress.isNotEmpty()
                 show(R.drawable.ic_voice, "Ears and a voice",
-                    "Three downloads that run entirely on your phone: the \"Hey Friday\" listener, speech recognition for your commands, and Kokoro, a natural-sounding voice. Use Wi-Fi if you can. You can carry on while they download.",
-                    when { done || downloading -> "Continue"; else -> "Download all (175 MB)" })
+                    "Download the local wake listener. Kokoro is optional for English speech in Settings. Automatic multilingual commands use your primary Gemini, Groq or OpenAI API, or the phone speech service. Urdu/Hindi replies need a matching system voice or multilingual cloud voice.",
+                    when { done || downloading -> "Continue"; else -> "Download wake listener (17 MB)" })
                 refreshDownloads = Setup.bindRows(this, ui.stepExtra, DOWNLOADS).also { it() }
             }
             Step.MODEL -> {

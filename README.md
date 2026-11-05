@@ -2,7 +2,7 @@
 
 Your own hands-free Android voice and phone assistant for Project 33.
 
-**Languages:** English, Urdu, Roman Urdu, Hindi and Hinglish. Select **Settings → Speech and reply language**, then turn Friday off and on.
+**Automatic language:** speak or type English, Urdu, Roman Urdu, Hindi or Hinglish. Friday infers language/script from each request and the conversation; there are no language buttons. Old language selections are ignored.
 
 **Development build:** actual wake accuracy, battery use and live-provider task success must be measured on your phone. This is a customized, MIT-licensed derivative of [Jarvis](https://github.com/judejulius/jarvis), with original attribution preserved. See [source analysis](docs/REVERSE_ENGINEERING.md), [credits](THIRD_PARTY.md) and [validation](docs/VALIDATION.md).
 
@@ -11,7 +11,7 @@ Your own hands-free Android voice and phone assistant for Project 33.
 ## Features
 
 - On-device wake phrases: **Hey Friday**, **Hey Assistant**, **Hey Computer**. Select in Settings, then turn the assistant off and on.
-- Spoken multi-turn conversation, short-term context and interruption, through local speech recognition, a tool-calling language model and speech synthesis.
+- Spoken multi-turn conversation, short-term context and interruption, through automatic multilingual speech recognition, a tool-calling language model and speech synthesis.
 - Local **go to sleep**, **goodbye** and **stand by** commands clear conversation and return to wake-only listening. Configurable 5–60 second silence timeout after replies.
 - Open apps, read visible screen content, tap, type, scroll, swipe, Back/Home, notifications and optional screenshots through Android Accessibility.
 - Direct battery, media volume, search, URL, alarm, timer, dialer and SMS-draft actions. Other app workflows use the screen agent.
@@ -24,7 +24,7 @@ Examples: “Hey Friday, open YouTube”, “set a timer for five minutes”, �
 1. Use an **ARM64 Android 8.0+** phone. This build does not contain 32-bit ARM binaries. Ordinary conversation works while locked; unlock before app-control tasks.
 2. Extract `app-debug.apk` from a successful GitHub Actions artifact. If Play Protect shows **“App blocked to protect your device”** with a sensitive-data/fraud warning, follow the [Windows development-install guide](docs/INSTALL_WINDOWS.md). Accessibility apps downloaded through a browser can trigger this block; changing Android versions or re-signing alone does not resolve it.
 3. Open Friday; grant microphone permission and enable **Friday phone control** in Accessibility. Configure background power settings for your device.
-4. Download wake detection (~17 MB) and offline English speech recognition (~57 MB). System TTS is the initial voice; Kokoro (~100 MB) is optional.
+4. Download wake detection (~17 MB). System TTS is the initial voice; install Urdu/Hindi voice data for those spoken replies. Kokoro (~100 MB) is optional for English only. The old English-only command model is not required by automatic mode.
 5. Add a tool-calling provider in **Models** and use **Test connection**. Supply your own provider API key, or use an OpenAI-compatible local server such as Ollama/LM Studio. Model IDs are editable; availability varies. A ChatGPT subscription does not supply API credit.
 6. Turn the assistant on once. Wake it by voice; subsequent turns need no button press.
 
@@ -46,7 +46,7 @@ If needed, create gitignored `local.properties` containing `sdk.dir=/your/androi
 ```text
 STANDBY: microphone → local keyword spotter
                           ↓ wake
-ACTIVE: local STT → LLM + tool loop → speech output
+ACTIVE: automatic STT → LLM + tool loop → speech output
                       ↕
          accessibility screen / Android actions
                           ↓ sleep or silence timeout
@@ -55,13 +55,19 @@ STANDBY: clear task and conversation; resume local wake detection
 
 `ApnaService` controls the lifecycle; `VoiceInput` owns the microphone and speech engines; `PhoneAgent` observes, runs one tool and checks a fresh screen; `DeviceActions` implements native intents and settings. No root or ADB is needed for app control. Extend runtime skills in `app/src/main/assets/skills/` and register their folders in `Settings.skillInstructions()`.
 
-This version uses **STT → LLM → TTS**, not OpenAI Realtime/WebRTC speech-to-speech. Response delay depends on the selected model, network and voice engine. Offline ASR and Kokoro are English-focused. Urdu/Roman Urdu and Hindi/Hinglish use the Android recognition service after activation, with an explicit Urdu (`ur-PK`) or Hindi (`hi-IN`) locale. Android 14+ services can optionally switch with English; support depends on the installed service. Internet may be required. Pause after the wake phrase and wait for the listening prompt. Talk-over interruption is limited to offline English; other modes support automatic follow-ups after replies.
+This version uses **STT → LLM → TTS**, not OpenAI Realtime/WebRTC speech-to-speech. Response delay depends on the selected model, network and voice engine.
 
-The selected AI model interprets Urdu, Roman Urdu and mixed commands. Urdu replies use native script. Roman Urdu replies display Latin text and carry a separate Urdu-script speech field, avoiding an English reading of Roman Urdu. Hindi/Hinglish work similarly. System TTS selects the language from the spoken script. Install a matching Urdu/Hindi TTS voice in Android Settings, or use a multilingual cloud TTS provider with your own key. English-only Kokoro is skipped for native-script replies. If a voice is unavailable, the app shows a message and retains the reply on screen. Actual recognition, code-switching and pronunciation need physical-phone testing.
+## Automatic multilingual speech
+
+- With **Gemini, Groq or OpenAI as the primary model**, Friday captures a short command after the wake prompt and sends it to that same provider using its configured API key. Gemini transcribes audio with the configured audio-capable model; Groq uses `whisper-large-v3-turbo`; OpenAI uses `whisper-1`. No language parameter forces a specific language. Audio transcription needs internet, provider/model access and quota; OpenAI audio is billed separately from dialogue. This path works independently of Android's automatic language-switching support.
+- Other providers use Android's speech service. Android 14+ is asked to detect/switch Urdu, Hindi and English; older services receive an Urdu initial hint and may require device-level speech-language configuration. Android alone cannot guarantee automatic mixed-language recognition on every phone. Use one of the supported primary providers for the cloud path.
+- The AI infers reply language and script on every turn, follows explicit requests to switch, and keeps mixed conversation natural. Roman Urdu and Hinglish overlap; Friday does not ask the user to label them. Latin-script South Asian input gets a matching Roman reply. Separate native-script speech fields provide Urdu/Hindi pronunciation while preserving the displayed Roman text.
+- Pause after “Hey Friday” and wait for “I am listening” before speaking. Commands are capped at 20 seconds of detected speech; silence ends the turn. Follow-ups need no wake phrase. Talk-over interruption is unavailable with this recognition path; stop controls remain available.
+- System TTS selects Urdu, Hindi or English from the spoken script. Install matching voice data, or choose a multilingual cloud voice. Missing voice data shows setup guidance and keeps the readable reply. Physical-device recognition, noise sensitivity and pronunciation remain unverified.
 
 ## Privacy and limitations
 
-- Wake audio stays on-device. Friday does not save raw microphone recordings. Offline ASR keeps command audio local too; the Android recognition service used by Urdu/Hindi modes and the English fallback may send active audio to its provider. Wake-word audio stays local.
+- Wake audio stays on-device. Activated command audio is captured in memory, never saved as a recording, and sent only to the primary Gemini/Groq/OpenAI provider for transcription when supported. With other primary providers, the Android speech service handles activated audio and may send it to its own provider. No active speech transcription or audio upload runs in standby.
 - Active tasks send command transcripts and visible screen text to your selected provider. Screenshot sharing defaults off. Password text is redacted and password typing is rejected, but sensitive content in other fields can still be visible to the agent.
 - Optional cloud TTS receives reply text. API keys are in private app preferences, excluded from Android backup; this version does not encrypt those preferences with a hardware-backed key. Use a limited personal key. HTTP is supported for local model servers; use HTTPS for cloud providers or untrusted networks.
 - Sleep/clear removes in-memory conversation and the last result. Crash reports can be dismissed from Home. Personal notes and provider settings persist. Provider-side records are outside the app's deletion control.

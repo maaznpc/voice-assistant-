@@ -13,6 +13,7 @@ import com.maaz.apna.Settings
 
 /** System speech recognition only after activation; wake detection remains local. Main thread only. */
 class CommandListener(private val context: Context) {
+    private val cloud = ActiveAudioRecognizer()
     private val main = Handler(Looper.getMainLooper())
     private var recognizer: SpeechRecognizer? = null
     private var generation = 0
@@ -24,8 +25,13 @@ class CommandListener(private val context: Context) {
     fun listen(timeoutMs: Long, onResult: (String?) -> Unit) {
         cancel()
         lastError = null
+        val primary = Settings(context).primary()
+        if (CloudTranscriber.supports(primary)) {
+            cloud.listen(primary!!, timeoutMs) { text, error -> lastError = error; onResult(text) }
+            return
+        }
         if (!SpeechRecognizer.isRecognitionAvailable(context)) {
-            lastError = "No speech recognition service. Install/enable a service supporting your selected language."
+            lastError = "No speech recognition service. Install/enable a multilingual speech service, or configure Gemini, Groq or OpenAI."
             onResult(null)
             return
         }
@@ -48,7 +54,7 @@ class CommandListener(private val context: Context) {
             override fun onError(error: Int) {
                 if (ticket != generation || delivered) return
                 lastError = when (error) {
-                    12, 13 -> "Selected speech language is unavailable. Enable/download Urdu or Hindi in your phone's speech service."
+                    12, 13 -> "Automatic speech languages are unavailable. Enable Urdu/Hindi/English in the phone speech service, or use Gemini, Groq or OpenAI."
                     SpeechRecognizer.ERROR_NETWORK, SpeechRecognizer.ERROR_NETWORK_TIMEOUT -> "Speech recognition needs a working internet connection."
                     SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> "Microphone permission is required."
                     SpeechRecognizer.ERROR_NO_MATCH, SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> null
@@ -70,12 +76,15 @@ class CommandListener(private val context: Context) {
     }
 
     fun cancel() {
+        cloud.cancel()
         generation++ // Invalidate callbacks before destroying the old recognizer.
         main.removeCallbacksAndMessages(null)
         val old = recognizer
         recognizer = null
         old?.destroy()
     }
+
+    fun shutdown() { cancel(); cloud.shutdown() }
 
     companion object {
         internal fun intent(language: SpeechLanguage): Intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
@@ -87,8 +96,8 @@ class CommandListener(private val context: Context) {
                 if (Build.VERSION.SDK_INT >= 34 && !language.isOffline) {
                     putExtra(RecognizerIntent.EXTRA_ENABLE_LANGUAGE_DETECTION, true)
                     putExtra(RecognizerIntent.EXTRA_ENABLE_LANGUAGE_SWITCH, RecognizerIntent.LANGUAGE_SWITCH_BALANCED)
-                    putStringArrayListExtra(RecognizerIntent.EXTRA_LANGUAGE_DETECTION_ALLOWED_LANGUAGES, arrayListOf(language.locale, "en-US"))
-                    putStringArrayListExtra(RecognizerIntent.EXTRA_LANGUAGE_SWITCH_ALLOWED_LANGUAGES, arrayListOf(language.locale, "en-US"))
+                    putStringArrayListExtra(RecognizerIntent.EXTRA_LANGUAGE_DETECTION_ALLOWED_LANGUAGES, arrayListOf("ur-PK", "hi-IN", "en-US"))
+                    putStringArrayListExtra(RecognizerIntent.EXTRA_LANGUAGE_SWITCH_ALLOWED_LANGUAGES, arrayListOf("ur-PK", "hi-IN", "en-US"))
                 }
             }
     }

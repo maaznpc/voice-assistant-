@@ -25,7 +25,7 @@ class Speaker(context: Context) {
     /** Whether the current speech can report its loudness (everything except Android's voice). */
     @Volatile private var measurable = false
 
-    val usingKokoro get() = settings.speechLanguage.isOffline && settings.voiceEngine == "kokoro" && kokoroReady
+    val usingKokoro get() = settings.voiceEngine == "kokoro" && kokoroReady
 
     private val kokoroReady get() = Kokoro.isInstalled(app) && !Kokoro.failed
 

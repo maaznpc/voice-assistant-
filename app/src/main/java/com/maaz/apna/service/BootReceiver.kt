@@ -11,6 +11,6 @@ class BootReceiver : BroadcastReceiver() {
         if (intent.action != Intent.ACTION_BOOT_COMPLETED || !Settings(context).startOnBoot) return
         // Newer Android versions may refuse to start a microphone service at boot; the
         // accessibility service retries once it connects.
-        runCatching { ApnaService.startIfSwitchedOn(context) }.onFailure { Log.w("Apna", "boot start refused", it) }
+        runCatching { ApnaService.startIfSwitchedOn(context) }.onFailure { Log.w("Friday", "boot start refused", it) }
     }
 }

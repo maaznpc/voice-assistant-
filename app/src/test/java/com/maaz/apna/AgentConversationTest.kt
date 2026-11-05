@@ -32,11 +32,11 @@ class AgentConversationTest {
     @Test fun ordinaryConversationWorksWithoutAccessibilityOrUnlock() {
         val session = object : ChatSession {
             override fun send(userText: String?, toolOutputs: List<ToolOutput>) = AssistantTurn("", listOf(
-                ToolCall("done", "finish", JSONObject().put("success", true).put("summary", "Hello, I am Apna."))))
+                ToolCall("done", "finish", JSONObject().put("success", true).put("summary", "Hello, I am Friday."))))
         }
         val result = PhoneAgent(settings, host) { _, _, _ -> session }.run("Hello")
         assertTrue(result.success)
-        assertEquals("Hello, I am Apna.", result.summary)
+        assertEquals("Hello, I am Friday.", result.summary)
     }
 
     @Test fun subsequentCallsInOneTurnCannotActOnAnOldScreen() {

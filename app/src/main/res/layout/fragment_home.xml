@@ -33,7 +33,7 @@
                     style="@style/Apna.PageTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Apna"
+                    android:text="Friday"
                     tools:ignore="HardcodedText" />
             </LinearLayout>
 
@@ -75,7 +75,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Apna closed unexpectedly last time. Sharing the report helps get it fixed."
+                    android:text="Friday closed unexpectedly last time. Sharing the report helps get it fixed."
                     android:textColor="@color/text"
                     android:textSize="14sp"
                     tools:ignore="HardcodedText" />
@@ -181,7 +181,7 @@
             android:paddingHorizontal="12dp"
             android:textColor="@color/text_dim"
             android:textSize="15sp"
-            tools:text="Say &quot;Hey Apna&quot;" />
+            tools:text="Say &quot;Hey Friday&quot;" />
 
         <TextView
             android:id="@+id/lastResult"
@@ -272,7 +272,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:gravity="center"
-            android:text="Try “Hey Apna, text Mum I’m on my way”"
+            android:text="Try “Hey Friday, text Mum I’m on my way”"
             android:textColor="@color/text_dim"
             android:textSize="12sp"
             tools:ignore="HardcodedText" />

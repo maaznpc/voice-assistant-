@@ -7,9 +7,10 @@ data class WakePhrase(val id: String, val label: String, val tokens: String) {
 
 object WakePhrases {
     val all = listOf(
-        WakePhrase("apna", "Hey Apna", "▁HE Y ▁A P N A"),
+        WakePhrase("friday", "Hey Friday", "▁HE Y ▁F RI DAY"),
         WakePhrase("assistant", "Hey Assistant", "▁HE Y ▁AS S IST ANT"),
         WakePhrase("computer", "Hey Computer", "▁HE Y ▁COMP U TER"),
     )
+    // Old "apna" selections migrate to Friday; explicit assistant/computer selections survive.
     fun find(id: String) = all.firstOrNull { it.id == id } ?: all.first()
 }

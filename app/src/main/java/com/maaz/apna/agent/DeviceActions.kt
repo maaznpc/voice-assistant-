@@ -34,14 +34,14 @@ class DeviceActions(private val context: Context) {
         "timer" -> {
             val seconds = a.getInt("value").also { require(it in 1..86400) { "Timer must be 1–86400 seconds." } }
             launch(Intent(AlarmClock.ACTION_SET_TIMER).putExtra(AlarmClock.EXTRA_LENGTH, seconds)
-                .putExtra(AlarmClock.EXTRA_MESSAGE, a.optString("text", "Apna timer"))
+                .putExtra(AlarmClock.EXTRA_MESSAGE, a.optString("text", "Friday timer"))
                 .putExtra(AlarmClock.EXTRA_SKIP_UI, false), "Opened the clock timer request; verify its screen.")
         }
         "alarm" -> {
             val hour = a.getInt("hour").also { require(it in 0..23) { "Hour must be 0–23." } }
             val minute = a.getInt("minute").also { require(it in 0..59) { "Minute must be 0–59." } }
             launch(Intent(AlarmClock.ACTION_SET_ALARM).putExtra(AlarmClock.EXTRA_HOUR, hour)
-                .putExtra(AlarmClock.EXTRA_MINUTES, minute).putExtra(AlarmClock.EXTRA_MESSAGE, a.optString("text", "Apna alarm"))
+                .putExtra(AlarmClock.EXTRA_MINUTES, minute).putExtra(AlarmClock.EXTRA_MESSAGE, a.optString("text", "Friday alarm"))
                 .putExtra(AlarmClock.EXTRA_SKIP_UI, false), "Opened the clock alarm request; verify its screen.")
         }
         else -> throw IllegalArgumentException("Unknown device action.")

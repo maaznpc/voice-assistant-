@@ -30,7 +30,7 @@
     <application
         android:name=".ApnaApp"
         android:allowBackup="false"
-        android:label="Apna Assistant"
+        android:label="Friday"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:networkSecurityConfig="@xml/network_security_config"
@@ -63,7 +63,7 @@
         <service
             android:name=".accessibility.ApnaAccessibilityService"
             android:exported="true"
-            android:label="Apna phone control"
+            android:label="Friday phone control"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />

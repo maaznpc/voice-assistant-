@@ -1,4 +1,6 @@
-# Test-install Apna Assistant from Windows
+# Test-install Friday from Windows
+
+The app is now named **Friday**. New builds use the **Friday-debug** artifact on the [Android build page](https://github.com/maaznpc/voice-assistant-/actions/workflows/android.yml). The package remains `com.maaz.apna`. The original blocked build and its verified hash below refer to the earlier Apna release; renaming does not resolve the Play Protect block.
 
 The reported message is **“App blocked to protect your device — This app can request access to sensitive data. This can increase the risk of identity theft or financial fraud.”**
 
@@ -10,7 +12,7 @@ For this personal development project, use Android's documented [USB development
 
 1. Start with **Pixel 8**. Connect only one phone. This APK requires Android 8.0+ and an OS supporting `arm64-v8a`; a phone model name alone does not verify its installed OS architecture.
 2. Download the Windows ZIP from Google's [SDK Platform Tools](https://developer.android.com/tools/releases/platform-tools) page and extract it.
-3. Download **Apna-Assistant-debug** from [successful build 41966859354](https://github.com/maaznpc/voice-assistant-/actions/runs/41966859354). Extract the artifact ZIP and copy `app-debug.apk` into the extracted `platform-tools` folder next to `adb.exe`. GitHub may require sign-in to download artifacts.
+3. Download **Friday-debug** from the latest successful [Android build](https://github.com/maaznpc/voice-assistant-/actions/workflows/android.yml). Extract the artifact ZIP and copy `app-debug.apk` into the extracted `platform-tools` folder next to `adb.exe`. GitHub may require sign-in to download artifacts.
 4. On Pixel: **Settings → About phone → Build number**, tap seven times and enter your PIN if requested. Then **Settings → System → Developer options → USB debugging**. Vivo menu names may differ; search Settings for Developer options.
 5. Connect with a USB data cable. Unlock the phone and approve the USB debugging prompt for your own computer.
 6. In File Explorer, open the `platform-tools` folder, type `powershell` in the address bar and press Enter. Run:
@@ -25,7 +27,7 @@ The connected phone must show `device`, not `unauthorized` or `offline`. Then ru
 .\adb.exe install -r .\app-debug.apk
 ```
 
-If the result is `Success`, open Apna Assistant on the phone and continue the [setup instructions](../README.md#install-and-configure). Microphone and phone-control access still require your approval on the phone; the install command does not grant them. Turn USB debugging off after testing.
+If the result is `Success`, open Friday on the phone and continue the [setup instructions](../README.md#install-and-configure). Microphone and phone-control access still require your approval on the phone; the install command does not grant them. Turn USB debugging off after testing.
 
 ## If installation fails
 

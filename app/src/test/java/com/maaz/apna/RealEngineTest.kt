@@ -152,7 +152,7 @@ class RealEngineTest {
     @Test
     fun oneBreathCommandIsHeardAndStarted() {
         installAll()
-        playIntoMic(silence(1.5), say("Hey Apna, send my wife a message on WhatsApp and tell her I love her."), silence(6.0))
+        playIntoMic(silence(1.5), say("Hey Friday, send my wife a message on WhatsApp and tell her I love her."), silence(6.0))
         val started = runService(40_000) { ApnaService.lastTask != null }
         assertTrue("command reached the agent: ${ApnaService.lastTask}", started)
         val task = ApnaService.lastTask!!.lowercase()
@@ -163,7 +163,7 @@ class RealEngineTest {
     @Test
     fun pauseAfterWakeWordStillGetsTheCommand() {
         installAll()
-        playIntoMic(silence(1.0), say("Hey Apna."), silence(2.5), say("Turn on the flashlight."), silence(6.0))
+        playIntoMic(silence(1.0), say("Hey Friday."), silence(2.5), say("Turn on the flashlight."), silence(6.0))
         assertTrue(runService(40_000) { ApnaService.lastTask != null })
         assertTrue(ApnaService.lastTask!!, "turn on the flashlight" in ApnaService.lastTask!!.lowercase())
     }
@@ -171,7 +171,7 @@ class RealEngineTest {
     @Test
     fun saysSorryWhenNothingFollowsTheWakeWord() {
         installAll()
-        playIntoMic(silence(1.0), say("Hey Apna."), silence(14.0))
+        playIntoMic(silence(1.0), say("Hey Friday."), silence(14.0))
         assertTrue(runService(40_000) { ApnaService.status == "Didn't catch that" })
         assertTrue("no task started", ApnaService.lastTask == null)
     }
@@ -267,24 +267,24 @@ class RealEngineTest {
         installAll()
         liveMic()
         val reply = "Done. I sent your wife a message on WhatsApp saying I love you. Is there anything else?"
-        val echo = scaled(say(reply, voice = 9), 0.35f) // loud: Apna's voice coming straight back into the mic
+        val echo = scaled(say(reply, voice = 9), 0.35f) // loud: Friday's voice coming straight back into the mic
         val voice = loadedVoice()
         voice.start()
         try {
 
-        // 1. Only Apna's own echo: no interruption.
+        // 1. Only Friday's own echo: no interruption.
         var bargedIn = false
         voice.listenWhileSpeaking(reply) { bargedIn = true }
         speakIntoMic(silence(0.3), echo, silence(0.8))
         waitFor((echo.size / 16 + 1500).toLong()) { bargedIn }
         println("ECHO-ONLY bargedIn=$bargedIn heard=${voice.lastEchoHeard}")
-        assertFalse("Apna interrupted itself", bargedIn)
+        assertFalse("Friday interrupted itself", bargedIn)
         voice.stopListeningWhileSpeaking()
 
         // 2. The user talks over the same echo.
         voice.listenWhileSpeaking(reply) { bargedIn = true }
         speakIntoMic(silence(0.3), mix(echo, say("No, send it to my brother instead.", voice = 6), 1.5), silence(1.0))
-        assertTrue("talking over Apna was noticed", waitFor(15_000) { bargedIn })
+        assertTrue("talking over Friday was noticed", waitFor(15_000) { bargedIn })
         var heard: String? = null
         var finished = false
         val t0 = System.currentTimeMillis()
@@ -348,14 +348,14 @@ class RealEngineTest {
                 voice.listenWhileSpeaking(reply) { stop -> bargedIn = true; stopped = stop }
                 speakIntoMic(silence(0.3), mix(echo, say("Stop.", voice = user), at), silence(1.0))
                 val noticed = waitFor(15_000) { bargedIn }
-                live.clear() // Apna stops talking, so its echo stops too
+                live.clear() // Friday stops talking, so its echo stops too
                 var how = if (stopped) "keyword" else "transcript"
                 if (noticed && !stopped) {
                     var heard: String? = null
                     var finished = false
                     voice.listenForCommand { heard = it; finished = true }
                     waitFor(10_000) { finished }
-                    // Apna has stopped either way; what matters is that no misheard task starts.
+                    // Friday has stopped either way; what matters is that no misheard task starts.
                     // Null, "stop", or a single word (which the service treats as "stop") are all fine.
                     val h = heard
                     if (h != null && !VoiceInput.isStopCommand(h) && VoiceInput.words(h).size > 1) how = "misheard: $h"
@@ -383,12 +383,12 @@ class RealEngineTest {
         val controller = Robolectric.buildService(ApnaService::class.java).create().startCommand(0, 1)
         try {
             assertTrue(waitFor(30_000) { ApnaService.status.startsWith("Say") })
-            speakIntoMic(say("Hey Apna, turn on the flashlight."))
+            speakIntoMic(say("Hey Friday, turn on the flashlight."))
             assertTrue(waitFor(30_000) { ApnaService.lastTask != null })
             // No phone control in tests, so the task ends straight away with a spoken explanation.
             assertTrue(waitFor(60_000) { ApnaService.lastResult != null })
             val first = ApnaService.lastTask
-            // Wait until Apna has finished replying and is listening for a follow-up.
+            // Wait until Friday has finished replying and is listening for a follow-up.
             assertTrue("listening for a follow-up", waitFor(60_000) { ApnaService.phase == ApnaService.Companion.Phase.LISTENING })
             speakIntoMic(say("Now turn it off again."))
             assertTrue(waitFor(30_000) { ApnaService.lastTask != first })
@@ -407,9 +407,9 @@ class RealEngineTest {
         val controller = Robolectric.buildService(ApnaService::class.java).create().startCommand(0, 1)
         try {
             assertTrue(waitFor(30_000) { ApnaService.status.startsWith("Say") })
-            speakIntoMic(say("Hey Apna, turn on the flashlight."))
+            speakIntoMic(say("Hey Friday, turn on the flashlight."))
             assertTrue(waitFor(60_000) { ApnaService.lastResult != null })
-            // Apna is now saying the result; interrupt it straight away.
+            // Friday is now saying the result; interrupt it straight away.
             speakIntoMic(say("Never mind, open the camera instead."))
             assertTrue(waitFor(30_000) { ApnaService.lastTask?.lowercase()?.contains("camera") == true })
             println("BARGE-IN task=${ApnaService.lastTask}")

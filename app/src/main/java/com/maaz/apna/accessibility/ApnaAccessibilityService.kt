@@ -27,7 +27,7 @@ class ApnaAccessibilityService : AccessibilityService() {
 
     @Volatile private var snapshot: ScreenSnapshot? = null
 
-    /** The task island shown at the top of the screen while Apna works. */
+    /** The task island shown at the top of the screen while Friday works. */
     val island by lazy { com.maaz.apna.ui.TaskIsland(this) }
 
     override fun onServiceConnected() {

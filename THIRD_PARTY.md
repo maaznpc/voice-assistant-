@@ -1,10 +1,10 @@
 # Credits and provenance
 
-Apna Assistant derives from **Jarvis**, copyright 2026 Mohammad Joud Julius, MIT license.
+Friday derives from **Jarvis**, copyright 2026 Mohammad Joud Julius, MIT license.
 Source: https://github.com/judejulius/jarvis at `5f896a5be08c6024a7c8285a7969a03c8e4c22c2`.
 The original LICENSE is unchanged. The initial local import commit preserves the source before customization.
 
-Retained foundations include the Kotlin UI, accessibility adapter, audio pipeline, provider clients, model downloader and upstream tests. Apna adds its application identity, wake vocabulary, local sleep/timeout, native actions, runtime skills, privacy defaults, screen-action sequencing and evaluation docs. It is an attributed derivative.
+Retained foundations include the Kotlin UI, accessibility adapter, audio pipeline, provider clients, model downloader and upstream tests. Friday adds its application identity, wake vocabulary, local sleep/timeout, native actions, runtime skills, privacy defaults, screen-action sequencing and evaluation docs. It is an attributed derivative.
 
 | Dependency | Purpose | Source/license |
 |---|---|---|
@@ -18,6 +18,6 @@ Retained foundations include the Kotlin UI, accessibility adapter, audio pipelin
 | Apache Commons Compress | Model unpacking | Apache-2.0 |
 | Gradle wrapper | Build tool | Apache-2.0 |
 
-Development guidance: Google's [Android permissions security skill](https://github.com/android/skills/blob/main/security/android-permissions-security/SKILL.md), read from GitHub. It is development guidance, not a phone runtime capability. The two bundled runtime skills were written for Apna.
+Development guidance: Google's [Android permissions security skill](https://github.com/android/skills/blob/main/security/android-permissions-security/SKILL.md), read from GitHub. It is development guidance, not a phone runtime capability. The two bundled runtime skills were written for Friday.
 
 Sanna was considered during discovery, but GitHub metadata reported no license; its source was not imported. No proprietary Nest/Alexa firmware was decompiled or used.

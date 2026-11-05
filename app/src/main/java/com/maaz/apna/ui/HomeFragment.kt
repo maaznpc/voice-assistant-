@@ -38,7 +38,7 @@ class HomeFragment : Fragment() {
             val report = CrashReporter.pending(requireContext()) ?: return@setOnClickListener
             startActivity(android.content.Intent.createChooser(
                 android.content.Intent(android.content.Intent.ACTION_SEND).setType("text/plain")
-                    .putExtra(android.content.Intent.EXTRA_SUBJECT, "Apna crash report")
+                    .putExtra(android.content.Intent.EXTRA_SUBJECT, "Friday crash report")
                     .putExtra(android.content.Intent.EXTRA_TEXT, report),
                 "Share crash report",
             ))
@@ -89,7 +89,7 @@ class HomeFragment : Fragment() {
             Phase.LISTENING -> "Listening"
             Phase.WORKING -> "Working"
         }
-        ui.statusText.text = if (running) ApnaService.status else "Turn Apna on to start listening"
+        ui.statusText.text = if (running) ApnaService.status else "Turn Friday on to start listening"
         val last = ApnaService.lastResult
         ui.lastResult.visibility = if (last != null && phase != Phase.WORKING) View.VISIBLE else View.GONE
         ui.lastResult.text = "Last task: $last"
@@ -110,7 +110,7 @@ class HomeFragment : Fragment() {
         val missing = Setup.remaining(ctx).filter { it.required }.map { it.title.lowercase() } +
             (if (primary == null) listOf("an AI model") else emptyList())
         ui.setupBanner.visibility = if (missing.isEmpty()) View.GONE else View.VISIBLE
-        ui.setupBannerText.text = "Apna still needs ${missing.joinToString(" and ")}. Tap to finish setup."
+        ui.setupBannerText.text = "Friday still needs ${missing.joinToString(" and ")}. Tap to finish setup."
     }
 
     private fun runTypedCommand() {
@@ -126,7 +126,7 @@ class HomeFragment : Fragment() {
     private fun startApna(action: String? = null, task: String? = null): Boolean {
         val started = ApnaService.start(requireContext(), action, task)
         if (!started) {
-            Toast.makeText(requireContext(), "Apna needs microphone permission first.", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), "Friday needs microphone permission first.", Toast.LENGTH_LONG).show()
             requireActivity().requestPermissions(Setup.PERMISSIONS, 1)
         }
         return started

@@ -20,9 +20,9 @@ import com.maaz.apna.R
 import com.maaz.apna.databinding.ViewIslandBinding
 
 /**
- * An iPhone-style Dynamic Island just below the camera. It shows what Apna is doing (listening,
- * working, speaking, done), bounces its sound bars with your voice and with Apna's, and lights
- * up its border while Apna talks. Tap it to expand it into a card with the task and buttons;
+ * An iPhone-style Dynamic Island just below the camera. It shows what Friday is doing (listening,
+ * working, speaking, done), bounces its sound bars with your voice and with Friday's, and lights
+ * up its border while Friday talks. Tap it to expand it into a card with the task and buttons;
  * tap outside (or the header) to shrink it back.
  *
  * Drawn as an accessibility overlay, so it needs no extra permission. Main thread only.
@@ -58,7 +58,7 @@ class TaskIsland(private val service: AccessibilityService) {
 
     // ---- States ----
 
-    /** Apna heard "Hey Apna" (or asked a question) and is listening. */
+    /** Friday heard "Hey Friday" (or asked a question) and is listening. */
     fun listening(partialText: (() -> String)? = null, level: (() -> Float)? = null) {
         mode = Mode.LISTENING
         partial = partialText
@@ -67,7 +67,7 @@ class TaskIsland(private val service: AccessibilityService) {
         render()
     }
 
-    /** Apna is working on [task] (null keeps the current task, e.g. after asking a question). */
+    /** Friday is working on [task] (null keeps the current task, e.g. after asking a question). */
     fun working(task: String? = null) {
         if (task != null) this.task = task
         mode = Mode.WORKING
@@ -82,7 +82,7 @@ class TaskIsland(private val service: AccessibilityService) {
         render()
     }
 
-    /** The outcome. The island goes away a few seconds after Apna finishes saying it. */
+    /** The outcome. The island goes away a few seconds after Friday finishes saying it. */
     fun finish(success: Boolean, text: String) {
         mode = if (success) Mode.DONE else Mode.FAILED
         status = text
@@ -92,7 +92,7 @@ class TaskIsland(private val service: AccessibilityService) {
         scheduleDismiss()
     }
 
-    /** Apna is saying [text]: the border moves with its voice. */
+    /** Friday is saying [text]: the border moves with its voice. */
     fun speaking(text: String, level: () -> Float?) {
         speaking = true
         if (mode != Mode.LISTENING) status = text
@@ -153,7 +153,7 @@ class TaskIsland(private val service: AccessibilityService) {
             else -> task ?: "Working…"
         }
 
-        // Sound bars: your voice while listening, Apna's while speaking.
+        // Sound bars: your voice while listening, Friday's while speaking.
         val showBars = mode == Mode.LISTENING || speaking
         b.islandBars.visibility = if (showBars) View.VISIBLE else View.GONE
         b.expBars.visibility = if (showBars) View.VISIBLE else View.GONE
@@ -193,7 +193,7 @@ class TaskIsland(private val service: AccessibilityService) {
             b.expPrimary.setTextColor(0xFFFFFFFF.toInt())
             b.expPrimary.setOnClickListener { hide() }
         }
-        b.expSecondary.text = "Open Apna"
+        b.expSecondary.text = "Open Friday"
         b.expSecondary.setOnClickListener { openApp() }
     }
 
@@ -296,7 +296,7 @@ class TaskIsland(private val service: AccessibilityService) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS
             }
-            title = "Apna task island"
+            title = "Friday task island"
         }
         return try {
             wm.addView(b.root, p)

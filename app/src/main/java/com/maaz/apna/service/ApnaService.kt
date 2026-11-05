@@ -35,7 +35,7 @@ import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
 /**
- * Long-running foreground service: waits for "Hey Apna", listens for the command, runs the
+ * Long-running foreground service: waits for "Hey Friday", listens for the command, runs the
  * phone agent on a worker thread, and speaks the result. Voice work happens on the main thread.
  */
 class ApnaService : Service() {
@@ -156,9 +156,9 @@ class ApnaService : Service() {
 
     // ---- Voice flow ----
     //
-    // A conversation: "Hey Apna" (or a follow-up straight after a reply) → listen → work → reply.
-    // The microphone stays open while Apna works and while it replies, so the user can interrupt
-    // at any point: by saying "Hey Apna" or, during a reply, simply by talking over it.
+    // A conversation: "Hey Friday" (or a follow-up straight after a reply) → listen → work → reply.
+    // The microphone stays open while Friday works and while it replies, so the user can interrupt
+    // at any point: by saying "Hey Friday" or, during a reply, simply by talking over it.
 
     /** What to do when the current speech ends naturally (also run if it's stopped from the island). */
     private var afterSpeech: (() -> Unit)? = null
@@ -171,8 +171,8 @@ class ApnaService : Service() {
 
     /**
      * Speaks [text]. If [interruptible] (and the user allows it), the microphone stays open and
-     * talking over Apna stops it and becomes the next command; otherwise the microphone is muted
-     * so Apna never hears itself.
+     * talking over Friday stops it and becomes the next command; otherwise the microphone is muted
+     * so Friday never hears itself.
      */
     private fun say(text: String, interruptible: Boolean = false, then: () -> Unit = {}) {
         val id = ++speechId
@@ -218,7 +218,7 @@ class ApnaService : Service() {
         when (state) {
             State.LISTENING_COMMAND -> return
             State.WORKING -> {
-                // "Hey Apna" during a task: stop it and take the new command.
+                // "Hey Friday" during a task: stop it and take the new command.
                 cancelled = true
                 taskId++
                 interruptSpeech()
@@ -231,7 +231,7 @@ class ApnaService : Service() {
         }
     }
 
-    /** The user talked over Apna: what they're saying is the next command, or they said "stop". */
+    /** The user talked over Friday: what they're saying is the next command, or they said "stop". */
     private fun onBargeIn(stop: Boolean) {
         if (destroyed) return
         interruptSpeech()
@@ -248,7 +248,7 @@ class ApnaService : Service() {
     }
 
     /**
-     * Transcribes the next thing the user says. After "Hey Apna" ([promptIfQuiet]) Apna says
+     * Transcribes the next thing the user says. After "Hey Friday" ([promptIfQuiet]) Friday says
      * "Yes?" if they pause; for a [followUp] it waits quietly for a few seconds and gives up silently.
      */
     private fun listen(promptIfQuiet: Boolean, followUp: Boolean = false, interrupted: Boolean = false) {
@@ -261,7 +261,7 @@ class ApnaService : Service() {
         island { it.listening(if (voice.canTranscribe) ({ voice.partialText }) else null, { voice.level }) }
         if (voice.canTranscribe) {
             voice.start()
-            // Keeps transcribing from the wake word on, so "Hey Apna, call mum" works in one breath.
+            // Keeps transcribing from the wake word on, so "Hey Friday, call mum" works in one breath.
             voice.listenForCommand(if (followUp) ConversationControl.timeoutMs(settings.sleepTimeoutSeconds) else 7000) { text ->
                 if (!destroyed && generation == listeningGeneration) onHeard(text, followUp, interrupted)
             }
@@ -285,7 +285,7 @@ class ApnaService : Service() {
         if (state != State.LISTENING_COMMAND) return
         when {
             // A one-word interruption is almost always "stop", "wait" or "no", often half drowned out
-            // by Apna's voice. Don't act on it; just listen for what comes next.
+            // by Friday's voice. Don't act on it; just listen for what comes next.
             interrupted && text != null && VoiceInput.words(text).size <= 1 && !VoiceInput.isStopCommand(text) ->
                 listen(promptIfQuiet = false, followUp = true)
             text.isNullOrBlank() && followUp -> {
@@ -332,7 +332,7 @@ class ApnaService : Service() {
         cancelled = false
         val id = ++taskId
         voice.cancelCommand()
-        // Keep listening for "Hey Apna" while working, so the user can stop or redirect the task.
+        // Keep listening for "Hey Friday" while working, so the user can stop or redirect the task.
         if (voice.hasWakeWord && settings.wakeWordEnabled) voice.start()
         lastTask = task
         island { it.working(task) }
@@ -379,7 +379,7 @@ class ApnaService : Service() {
         return conversation.toList()
     }
 
-    /** Goes back to waiting for "Hey Apna" (loading any models downloaded since). */
+    /** Goes back to waiting for "Hey Friday" (loading any models downloaded since). */
     private fun resumeListening() {
         if (destroyed || state != State.IDLE) return
         voice.echoCancellation = settings.interruptByTalking
@@ -389,7 +389,7 @@ class ApnaService : Service() {
             when {
                 error != null -> update(error)
                 !settings.wakeWordEnabled -> { voice.stop(); update("Ready. Tap the mic to talk.") }
-                !voice.hasWakeWord -> update("Ready. Download the wake word in Settings to use \"Hey Apna\".")
+                !voice.hasWakeWord -> update("Ready. Download the wake word in Settings to use \"Hey Friday\".")
                 else -> { voice.start(); update("Say \"${voice.wakePhrase.label}\"") }
             }
             main.removeCallbacks(renewWakeLock)
@@ -477,7 +477,7 @@ class ApnaService : Service() {
     }
 
     private fun createChannel() {
-        val channel = NotificationChannel(CHANNEL, "Apna", NotificationManager.IMPORTANCE_LOW)
+        val channel = NotificationChannel(CHANNEL, "Friday", NotificationManager.IMPORTANCE_LOW)
         getSystemService(NotificationManager::class.java).createNotificationChannel(channel)
     }
 
@@ -487,7 +487,7 @@ class ApnaService : Service() {
             PendingIntent.getService(this, code, Intent(this, ApnaService::class.java).setAction(action), PendingIntent.FLAG_IMMUTABLE)
         return NotificationCompat.Builder(this, CHANNEL)
             .setSmallIcon(R.drawable.ic_stat_apna)
-            .setContentTitle("Apna")
+            .setContentTitle("Friday")
             .setContentText(text)
             .setStyle(NotificationCompat.BigTextStyle().bigText(text))
             .setOngoing(true)
@@ -529,7 +529,7 @@ class ApnaService : Service() {
         /** Set by the visible activity to mirror status changes. Called on the main thread. */
         var statusListener: ((String) -> Unit)? = null
 
-        /** Returns false if Apna can't start yet because microphone permission is missing. */
+        /** Returns false if Friday can't start yet because microphone permission is missing. */
         fun start(context: Context, action: String? = null, task: String? = null): Boolean {
             if (ContextCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
                 return false
@@ -540,14 +540,14 @@ class ApnaService : Service() {
             return true
         }
 
-        /** Turns Apna off and keeps it off until the user turns it on again. */
+        /** Turns Friday off and keeps it off until the user turns it on again. */
         fun stop(context: Context) {
             Settings(context).switchedOn = false
             // stopService never creates the service, unlike sending it a "shut down" intent.
             context.stopService(Intent(context, ApnaService::class.java))
         }
 
-        /** For automatic starts (boot, phone control connecting): only if the user left Apna on. */
+        /** For automatic starts (boot, phone control connecting): only if the user left Friday on. */
         fun startIfSwitchedOn(context: Context) {
             if (Settings(context).switchedOn) start(context)
         }

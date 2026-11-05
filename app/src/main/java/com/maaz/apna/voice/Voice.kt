@@ -11,9 +11,9 @@ interface VoiceEngine {
 }
 
 /**
- * The voice Apna talks with: a cloud voice or Kokoro when one is selected and available,
+ * The voice Friday talks with: a cloud voice or Kokoro when one is selected and available,
  * otherwise Android's built-in voice. If a cloud voice fails (no internet, bad key), that sentence
- * is spoken locally instead, so Apna never goes silent. Settings are read on every call.
+ * is spoken locally instead, so Friday never goes silent. Settings are read on every call.
  */
 class Speaker(context: Context) {
     private val app = context.applicationContext

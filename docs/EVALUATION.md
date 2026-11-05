@@ -1,6 +1,6 @@
 # Project 33 evaluation
 
-Record phone model, Android version, RAM, app build, wake phrase, speech/voice engines, provider/model and network. Keep tuning samples separate from test speakers/rooms. Do not reuse upstream results as measurements of Apna.
+Record phone model, Android version, RAM, app build, wake phrase, speech/voice engines, provider/model and network. Keep tuning samples separate from test speakers/rooms. Do not reuse upstream results as measurements of Friday.
 
 ## End-to-end acceptance
 

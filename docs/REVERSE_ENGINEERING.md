@@ -2,7 +2,7 @@
 
 Inspected 2026-11-05: [judejulius/jarvis](https://github.com/judejulius/jarvis) at `5f896a5be08c6024a7c8285a7969a03c8e4c22c2`. Public MIT-licensed source analysis, not proprietary firmware extraction. Upstream performance claims are not our device results.
 
-| Inspected module | Observed architecture | Apna adaptation |
+| Inspected module | Observed architecture | Friday adaptation |
 |---|---|---|
 | VoiceInput | One 16 kHz stream; local KWS, streaming ASR, buffered wake audio and echo handling | Genuine BPE sequences for three wake phrases; selection feeds KWS and transcript cleanup |
 | JarvisService → ApnaService | IDLE/LISTENING_COMMAND/WORKING, reply interruption and fixed follow-up | Configurable timeout, sleep commands, cleared history, callback generations, lifecycle wake lock and unlock failure handling only for UI actions; conversation can work while locked or without Accessibility |
@@ -16,7 +16,7 @@ Inspected 2026-11-05: [judejulius/jarvis](https://github.com/judejulius/jarvis) 
 Renaming a UI string does not change an acoustic detector. These pieces were generated from the actual downloaded keyword model's `bpe.model` with SentencePiece:
 
 ```text
-HEY APNA       → ▁HE Y ▁A P N A
+HEY FRIDAY     → ▁HE Y ▁F RI DAY
 HEY ASSISTANT  → ▁HE Y ▁AS S IST ANT
 HEY COMPUTER   → ▁HE Y ▁COMP U TER
 ```

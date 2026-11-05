@@ -179,7 +179,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_marginStart="4dp"
-                        android:text="Needs an internet connection. If the voice can't be reached, Apna uses Kokoro or the phone's voice instead."
+                        android:text="Needs an internet connection. If the voice can't be reached, Friday uses Kokoro or the phone's voice instead."
                         android:textColor="@color/text_dim"
                         android:textSize="12sp"
                         tools:ignore="HardcodedText" />
@@ -273,7 +273,7 @@
                     app:singleSelection="true" app:selectionRequired="true" />
                 <TextView
                     android:layout_width="match_parent" android:layout_height="wrap_content"
-                    android:text="Turn Apna off and on after changing the wake phrase."
+                    android:text="Turn Friday off and on after changing the wake phrase."
                     android:textColor="@color/text_dim" android:textSize="12sp" tools:ignore="HardcodedText" />
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent" android:layout_height="wrap_content"
@@ -312,7 +312,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="64dp"
-                    android:text="Talk over Apna, or say &quot;stop&quot;, and it stops and listens. Keeps the microphone on while it speaks, with echo cancellation."
+                    android:text="Talk over Friday, or say &quot;stop&quot;, and it stops and listens. Keeps the microphone on while it speaks, with echo cancellation."
                     android:textColor="@color/text_dim"
                     android:textSize="12sp"
                     tools:ignore="HardcodedText" />
@@ -330,7 +330,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="64dp"
-                    android:text="For a few seconds after answering, you can carry on without saying &quot;Hey Apna&quot; again."
+                    android:text="For a few seconds after answering, you can carry on without saying &quot;Hey Friday&quot; again."
                     android:textColor="@color/text_dim"
                     android:textSize="12sp"
                     tools:ignore="HardcodedText" />
@@ -380,7 +380,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="0dp"
-                    android:hint="Things Apna should know about you"
+                    android:hint="Things Friday should know about you"
                     app:helperText="e.g. My wife is saved as &quot;Amaka&quot; in WhatsApp"
                     app:helperTextTextColor="@color/text_dim">
 
@@ -398,7 +398,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="Show the task island at the top while Apna works"
+                    android:text="Show the task island at the top while Friday works"
                     android:textColor="@color/text"
                     tools:ignore="HardcodedText" />
 
@@ -429,7 +429,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/openSource" style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:text="About Apna · open source licenses" tools:ignore="HardcodedText" />
+            android:text="About Friday · open source licenses" tools:ignore="HardcodedText" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/rerunSetup"

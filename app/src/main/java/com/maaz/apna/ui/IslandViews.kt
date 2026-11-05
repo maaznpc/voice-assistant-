@@ -21,7 +21,7 @@ import kotlin.math.sin
 /**
  * Root of the task island. Draws the black shape itself so it can morph smoothly between the
  * compact pill and the expanded card ([expansion] 0 → 1), clips the content to that shape, and
- * draws the moving border while Apna speaks.
+ * draws the moving border while Friday speaks.
  */
 class IslandFrame @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : FrameLayout(context, attrs) {
 
@@ -31,7 +31,7 @@ class IslandFrame @JvmOverloads constructor(context: Context, attrs: AttributeSe
     var expansion = 0f
         set(v) { field = v; invalidate() }
 
-    /** Loudness of Apna's voice (0..1), or null when the voice can't report it. Null provider = not speaking. */
+    /** Loudness of Friday's voice (0..1), or null when the voice can't report it. Null provider = not speaking. */
     var speechLevel: (() -> Float?)? = null
         set(v) { field = v; invalidate() }
 

@@ -77,7 +77,7 @@ class RealEngineTestTuning {
     }
 
     private val voices = listOf(5, 6, 9, 10, 1, 7)
-    private val wakePhrases = listOf("Hey Apna, turn on the flashlight.", "Hey Apna, what's the weather?", "Apna, call mum.")
+    private val wakePhrases = listOf("Hey Friday, turn on the flashlight.", "Hey Friday, what's the weather?", "Friday, call mum.")
     private val soundAlikes = listOf("Hey Travis, how are you?", "The harvest is almost ready.", "Have you seen my car keys?",
         "Jar of biscuits please.", "Hey service desk.", "Charge this phone.", "Hey Jarred, nice to see you.", "Harvey's coming over.",
         "The jars are in the cupboard.", "Nervous about the exam.", "Hey, are you there?", "Davis Cup final.")

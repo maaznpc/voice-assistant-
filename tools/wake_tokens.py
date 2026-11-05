@@ -4,7 +4,7 @@ import argparse
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument("bpe_model")
-parser.add_argument("phrase", help='For example "hey apna"')
+parser.add_argument("phrase", help='For example "hey friday"')
 args = parser.parse_args()
 import sentencepiece as spm
 

@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="Apna uses your primary model (★). Tap a model to edit it or make it primary."
+            android:text="Friday uses your primary model (★). Tap a model to edit it or make it primary."
             tools:ignore="HardcodedText" />
 
         <LinearLayout
@@ -116,7 +116,7 @@
                     style="@style/Apna.Body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="If the primary model can't be reached (offline, out of credit, server down), Apna carries on with your other models, top to bottom."
+                    android:text="If the primary model can't be reached (offline, out of credit, server down), Friday carries on with your other models, top to bottom."
                     android:textSize="12sp"
                     tools:ignore="HardcodedText" />
             </LinearLayout>

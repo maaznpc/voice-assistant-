@@ -74,7 +74,7 @@ class SettingsFragment : Fragment() {
         }
         ui.clearConversation.setOnClickListener {
             if (ApnaService.running) ApnaService.start(requireContext(), ApnaService.ACTION_RUN, "go to sleep")
-            Toast.makeText(requireContext(), "Conversation cleared. No raw recordings are saved by Apna.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Conversation cleared. No raw recordings are saved by Friday.", Toast.LENGTH_SHORT).show()
         }
         ui.wakeSwitch.isChecked = settings.wakeWordEnabled
         ui.bootSwitch.isChecked = settings.startOnBoot
@@ -103,8 +103,8 @@ class SettingsFragment : Fragment() {
         ui.openSource.setOnClickListener {
             val license = requireContext().assets.open("legal/LICENSE.txt").bufferedReader().use { it.readText() }
             com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Apna Assistant · Open source")
-                .setMessage("Based on Jarvis by Mohammad Joud Julius. Apna modifications are documented in the repository.\n\n" + license)
+                .setTitle("Friday · Open source")
+                .setMessage("Based on Jarvis by Mohammad Joud Julius. Friday modifications are documented in the repository.\n\n" + license)
                 .setPositiveButton("Close", null).show()
         }
         ui.rerunSetup.setOnClickListener {
@@ -188,7 +188,7 @@ class SettingsFragment : Fragment() {
         }
         val voice = when {
             cloud != null -> "${cloud.name}"
-            else -> KOKORO_VOICES.firstOrNull { it.sid == settings.kokoroSpeaker }?.name ?: "Apna"
+            else -> KOKORO_VOICES.firstOrNull { it.sid == settings.kokoroSpeaker }?.name ?: "Friday"
         }
         ui.previewButton.isEnabled = false
         ui.previewButton.text = "Speaking…"

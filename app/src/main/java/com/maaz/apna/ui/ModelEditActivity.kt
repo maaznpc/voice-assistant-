@@ -136,7 +136,7 @@ class ModelEditActivity : AppCompatActivity() {
         val profile = existing ?: return
         MaterialAlertDialogBuilder(this)
             .setTitle("Delete ${profile.name}?")
-            .setMessage("Apna will stop using this model.")
+            .setMessage("Friday will stop using this model.")
             .setNegativeButton("Cancel", null)
             .setPositiveButton("Delete") { _, _ ->
                 settings.deleteProfile(profile.id)

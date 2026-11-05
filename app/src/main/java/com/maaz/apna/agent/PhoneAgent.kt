@@ -51,7 +51,7 @@ class PhoneAgent(
                 "\nUse this only to understand what the new request refers to. Don't redo earlier tasks.\n\n"
         val a11y = ApnaAccessibilityService.instance
         val models = settings.modelsInOrder().let { if (settings.fallbackEnabled) it else it.take(1) }
-        if (models.isEmpty()) return AgentResult(false, "No AI model is set up yet. Add one on the Models page in the Apna app.")
+        if (models.isEmpty()) return AgentResult(false, "No AI model is set up yet. Add one on the Models page in the Friday app.")
 
         var lastError = ""
         for ((index, profile) in models.withIndex()) {
@@ -134,7 +134,7 @@ class PhoneAgent(
             if (call.name == "device_action" && a.optString("action") in setOf("battery", "volume")) {
                 return ToolOutput(call.id, DeviceActions(settings.appContext).execute(a))
             }
-            requireNotNull(a11y) { "Phone control is disabled. Enable Apna in Android Accessibility settings." }
+            requireNotNull(a11y) { "Phone control is disabled. Enable Friday in Android Accessibility settings." }
             check(host.ensureUnlocked() && !host.isCancelled) { "Phone is locked or task was stopped." }
             check(!a11y.getSystemService(android.app.KeyguardManager::class.java).isKeyguardLocked) { "Phone is locked." }
             var settleMs = 900L
@@ -197,7 +197,7 @@ class PhoneAgent(
         val now = SimpleDateFormat("EEEE d MMMM yyyy, HH:mm", Locale.getDefault()).format(Date())
         val notes = settings.personalNotes.trim()
         return """
-You are Apna, a voice assistant that operates the user's Android phone on their behalf. The user gave you a spoken command; complete it by operating the phone like a person would.
+You are Friday, a voice assistant that operates the user's Android phone on their behalf. The user gave you a spoken command; complete it by operating the phone like a person would.
 
 How you see the phone: after every action you receive a fresh list of the on-screen elements. Each line looks like
   [12] Button "Send" desc="Send message" id=send {click} @(980,2100)

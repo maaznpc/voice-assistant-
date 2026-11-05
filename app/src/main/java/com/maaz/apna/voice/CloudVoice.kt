@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit
 
 /**
  * Text-to-speech from a cloud provider (OpenAI, ElevenLabs, Fish Audio, or any OpenAI-compatible
- * server). Asks for raw PCM and plays it as it streams in, so Apna starts talking within a moment
+ * server). Asks for raw PCM and plays it as it streams in, so Friday starts talking within a moment
  * instead of waiting for the whole clip.
  */
 class CloudVoice {

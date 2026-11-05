@@ -30,7 +30,7 @@ import com.maaz.apna.voice.ModelDownloader
 import com.maaz.apna.voice.SpeechModel
 import com.maaz.apna.voice.WakeModel
 
-/** The things Apna needs before it can work, shared by onboarding, home and settings. */
+/** The things Friday needs before it can work, shared by onboarding, home and settings. */
 object Setup {
 
     enum class Item(
@@ -40,10 +40,10 @@ object Setup {
         val action: String,
         val required: Boolean,
     ) {
-        MICROPHONE(R.drawable.ic_mic, "Microphone", "So Apna can hear you", "Allow", true),
-        PHONE_CONTROL(R.drawable.ic_touch, "Phone control", "Lets Apna tap, type and scroll for you", "Enable", true),
-        BACKGROUND(R.drawable.ic_battery, "Background power", "Keeps Apna listening with the screen off", "Allow", false),
-        WAKE_WORD(R.drawable.ic_wave, "Wake word", "Offline \"Hey Apna\" detector · 17 MB", "Download", false),
+        MICROPHONE(R.drawable.ic_mic, "Microphone", "So Friday can hear you", "Allow", true),
+        PHONE_CONTROL(R.drawable.ic_touch, "Phone control", "Lets Friday tap, type and scroll for you", "Enable", true),
+        BACKGROUND(R.drawable.ic_battery, "Background power", "Keeps Friday listening with the screen off", "Allow", false),
+        WAKE_WORD(R.drawable.ic_wave, "Wake word", "Offline \"Hey Friday\" detector · 17 MB", "Download", false),
         SPEECH(R.drawable.ic_mic, "Speech recognition", "Understands your commands offline · 57 MB", "Download", false),
         VOICE(R.drawable.ic_voice, "Kokoro voice", "Natural on-device voice · 100 MB", "Download", false),
     }
@@ -70,7 +70,7 @@ object Setup {
             Item.PHONE_CONTROL -> {
                 Toast.makeText(
                     activity,
-                    "Tap \"Installed apps\" (or \"Downloaded apps\"), then \"Apna phone control\", and switch it on.",
+                    "Tap \"Installed apps\" (or \"Downloaded apps\"), then \"Friday phone control\", and switch it on.",
                     Toast.LENGTH_LONG,
                 ).show()
                 activity.startActivity(Intent(ACTION_ACCESSIBILITY_SETTINGS))
@@ -84,7 +84,7 @@ object Setup {
                 )
                 val opened = attempts.indexOfFirst { runCatching { activity.startActivity(it) }.isSuccess }
                 if (opened > 0) {
-                    Toast.makeText(activity, "Find Apna in the list and set it to \"Don't optimise\" or \"Unrestricted\".", Toast.LENGTH_LONG).show()
+                    Toast.makeText(activity, "Find Friday in the list and set it to \"Don't optimise\" or \"Unrestricted\".", Toast.LENGTH_LONG).show()
                 }
             }
             Item.WAKE_WORD, Item.SPEECH, Item.VOICE -> Downloads.start(activity.applicationContext, item)

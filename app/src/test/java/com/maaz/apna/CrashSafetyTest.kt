@@ -27,7 +27,7 @@ import java.time.Duration
 
 /**
  * The native speech libraries can fail to load on some phones (e.g. 16 KB memory pages). These
- * tests run where they *can't* load at all, and check Apna keeps running instead of crashing.
+ * tests run where they *can't* load at all, and check Friday keeps running instead of crashing.
  */
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [35])

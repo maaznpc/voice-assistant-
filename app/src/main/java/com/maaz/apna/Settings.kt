@@ -71,7 +71,7 @@ class Settings(context: Context) {
     }
 
     var wakePhraseId: String
-        get() = prefs.getString("wake_phrase", "apna")!!
+        get() = com.maaz.apna.voice.WakePhrases.find(prefs.getString("wake_phrase", "friday")!!).id
         set(value) = prefs.edit().putString("wake_phrase", com.maaz.apna.voice.WakePhrases.find(value).id).apply()
 
     var sleepTimeoutSeconds: Int
@@ -93,7 +93,7 @@ class Settings(context: Context) {
         get() = prefs.getBoolean("wake_enabled", true)
         set(v) = prefs.edit().putBoolean("wake_enabled", v).apply()
 
-    /** Whether the user has Apna switched on. Only the user changes this, so "Turn off" sticks. */
+    /** Whether the user has Friday switched on. Only the user changes this, so "Turn off" sticks. */
     var switchedOn: Boolean
         get() = prefs.getBoolean("switched_on", false)
         set(v) = prefs.edit().putBoolean("switched_on", v).apply()
@@ -107,7 +107,7 @@ class Settings(context: Context) {
         get() = prefs.getString("notes", "")!!
         set(v) = prefs.edit().putString("notes", v).apply()
 
-    /** Show the task island at the top of the screen while Apna works. */
+    /** Show the task island at the top of the screen while Friday works. */
     var showIsland: Boolean
         get() = prefs.getBoolean("island", true)
         set(v) = prefs.edit().putBoolean("island", v).apply()
@@ -224,7 +224,7 @@ class Settings(context: Context) {
 
     // ---- Conversation ----
 
-    /** Let the user talk over Apna to interrupt it (the microphone stays on while it speaks). */
+    /** Let the user talk over Friday to interrupt it (the microphone stays on while it speaks). */
     var interruptByTalking: Boolean
         get() = prefs.getBoolean("barge_in", true)
         set(v) = prefs.edit().putBoolean("barge_in", v).apply()
@@ -278,7 +278,7 @@ val CLOUD_VOICES = listOf(
 
 data class KokoroVoice(val sid: Int, val name: String, val accent: String)
 
-/** Speakers in the kokoro-en-v0_19 model; sid is the model's speaker id. British male first: it suits Apna. */
+/** Speakers in the kokoro-en-v0_19 model; sid is the model's speaker id. British male first: it suits Friday. */
 val KOKORO_VOICES = listOf(
     KokoroVoice(9, "George", "British male"),
     KokoroVoice(10, "Lewis", "British male"),

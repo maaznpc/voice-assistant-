@@ -13,7 +13,7 @@ import java.io.InputStream
 /** Downloads and unpacks the on-device voice models. */
 object ModelDownloader {
 
-    /** The "Hey Apna" keyword model: a 17 MB download, of which only ~5 MB of int8 files are kept. */
+    /** The "Hey Friday" keyword model: a 17 MB download, of which only ~5 MB of int8 files are kept. */
     fun downloadWakeWord(context: Context, progress: (Int) -> Unit) {
         download(context, WakeModel.URL, WakeModel.dir(context), progress, ::openTarBz2)
         prune(WakeModel.dir(context), WakeModel.KEEP_FILES)

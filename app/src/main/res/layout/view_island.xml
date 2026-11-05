@@ -79,7 +79,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_weight="1"
                 android:fontFamily="sans-serif-medium"
-                android:text="Apna"
+                android:text="Friday"
                 android:textColor="#FFFFFF"
                 android:textSize="15sp"
                 tools:ignore="HardcodedText" />
@@ -152,7 +152,7 @@
                 android:gravity="center"
                 android:textColor="#FFFFFF"
                 android:textSize="15sp"
-                tools:text="Open Apna" />
+                tools:text="Open Friday" />
         </LinearLayout>
     </LinearLayout>
 </com.maaz.apna.ui.IslandFrame>

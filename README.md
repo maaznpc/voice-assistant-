@@ -1,27 +1,27 @@
-# Apna Assistant
+# Friday
 
 Your own hands-free Android voice and phone assistant for Project 33.
 
 **Development build:** actual wake accuracy, battery use and live-provider task success must be measured on your phone. This is a customized, MIT-licensed derivative of [Jarvis](https://github.com/judejulius/jarvis), with original attribution preserved. See [source analysis](docs/REVERSE_ENGINEERING.md), [credits](THIRD_PARTY.md) and [validation](docs/VALIDATION.md).
 
-<img src="docs/images/home.png" alt="Apna home screen rendered by the UI test" width="240"> <img src="docs/images/settings.png" alt="Apna settings rendered by the UI test" width="240">
+<img src="docs/images/home.png" alt="Friday home screen rendered by the UI test" width="240"> <img src="docs/images/settings.png" alt="Friday settings rendered by the UI test" width="240">
 
 ## Features
 
-- On-device wake phrases: **Hey Apna**, **Hey Assistant**, **Hey Computer**. Select in Settings, then turn the assistant off and on.
+- On-device wake phrases: **Hey Friday**, **Hey Assistant**, **Hey Computer**. Select in Settings, then turn the assistant off and on.
 - Spoken multi-turn conversation, short-term context and interruption, through local speech recognition, a tool-calling language model and speech synthesis.
 - Local **go to sleep**, **goodbye** and **stand by** commands clear conversation and return to wake-only listening. Configurable 5–60 second silence timeout after replies.
 - Open apps, read visible screen content, tap, type, scroll, swipe, Back/Home, notifications and optional screenshots through Android Accessibility.
 - Direct battery, media volume, search, URL, alarm, timer, dialer and SMS-draft actions. Other app workflows use the screen agent.
 - Bundled Markdown phone/conversation skills, provider connection tests, fallback models, task overlay and persistent notification with stop controls.
 
-Examples: “Hey Apna, open YouTube”, “set a timer for five minutes”, “what is my battery level?”, “set media volume to 30 percent”, “search for the weather in Lahore”, “open WhatsApp and send Ali I am on my way”, then “go to sleep”. Ambiguous contacts require clarification.
+Examples: “Hey Friday, open YouTube”, “set a timer for five minutes”, “what is my battery level?”, “set media volume to 30 percent”, “search for the weather in Lahore”, “open WhatsApp and send Ali I am on my way”, then “go to sleep”. Ambiguous contacts require clarification.
 
 ## Install and configure
 
 1. Use an **ARM64 Android 8.0+** phone. This build does not contain 32-bit ARM binaries. Ordinary conversation works while locked; unlock before app-control tasks.
 2. Extract `app-debug.apk` from a successful GitHub Actions artifact. If Play Protect shows **“App blocked to protect your device”** with a sensitive-data/fraud warning, follow the [Windows development-install guide](docs/INSTALL_WINDOWS.md). Accessibility apps downloaded through a browser can trigger this block; changing Android versions or re-signing alone does not resolve it.
-3. Open Apna Assistant; grant microphone permission and enable **Apna phone control** in Accessibility. Configure background power settings for your device.
+3. Open Friday; grant microphone permission and enable **Friday phone control** in Accessibility. Configure background power settings for your device.
 4. Download wake detection (~17 MB) and offline English speech recognition (~57 MB). System TTS is the initial voice; Kokoro (~100 MB) is optional.
 5. Add a tool-calling provider in **Models** and use **Test connection**. Supply your own provider API key, or use an OpenAI-compatible local server such as Ollama/LM Studio. Model IDs are editable; availability varies. A ChatGPT subscription does not supply API credit.
 6. Turn the assistant on once. Wake it by voice; subsequent turns need no button press.
@@ -57,7 +57,7 @@ This version uses **STT → LLM → TTS**, not OpenAI Realtime/WebRTC speech-to-
 
 ## Privacy and limitations
 
-- Wake audio stays on-device. Apna does not save raw microphone recordings. Offline ASR keeps command audio local too; the optional Android recognizer fallback may use Google's servers.
+- Wake audio stays on-device. Friday does not save raw microphone recordings. Offline ASR keeps command audio local too; the optional Android recognizer fallback may use Google's servers.
 - Active tasks send command transcripts and visible screen text to your selected provider. Screenshot sharing defaults off. Password text is redacted and password typing is rejected, but sensitive content in other fields can still be visible to the agent.
 - Optional cloud TTS receives reply text. API keys are in private app preferences, excluded from Android backup; this version does not encrypt those preferences with a hardware-backed key. Use a limited personal key. HTTP is supported for local model servers; use HTTPS for cloud providers or untrusted networks.
 - Sleep/clear removes in-memory conversation and the last result. Crash reports can be dismissed from Home. Personal notes and provider settings persist. Provider-side records are outside the app's deletion control.

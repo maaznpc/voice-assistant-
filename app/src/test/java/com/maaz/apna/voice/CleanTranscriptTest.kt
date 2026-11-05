@@ -9,15 +9,15 @@ class CleanTranscriptTest {
     private fun c(s: String) = VoiceInput.clean(s)
 
     @Test fun stripsWakeWordVariants() {
-        assertEquals("Send my wife a message", c("hey apna send my wife a message"))
-        assertEquals("Turn on the flashlight", c("Page Arvis turn on the flashlight"))
-        assertEquals("Open YouTube", c("Apna, open YouTube"))
-        assertEquals("Call mum", c("okay hey jar vis call mum"))
-        assertEquals("", c("Hey Jervis."))
+        assertEquals("Send my wife a message", c("hey friday send my wife a message"))
+        assertEquals("Turn on the flashlight", c("Hey Fri day turn on the flashlight"))
+        assertEquals("Open YouTube", c("Friday, open YouTube"))
+        assertEquals("Call mum", c("okay hey Friday call mum"))
+        assertEquals("", c("Hey Friday."))
     }
 
     @Test fun stripsOwnPrompt() {
-        assertEquals("Open settings", c("Apna yes? open settings"))
+        assertEquals("Open settings", c("Friday yes? open settings"))
         assertEquals("Open settings", c("yes, open settings"))
     }
 
@@ -25,13 +25,16 @@ class CleanTranscriptTest {
         assertEquals("Text Travis that I'm late", c("text Travis that I'm late"))
         assertEquals("Turn on the flashlight", c("turn on the flashlight"))
         assertEquals("Play the harvest playlist", c("play the harvest playlist"))
+        assertEquals("On Friday call mum", c("on Friday call mum"))
+        assertEquals("Next Friday set an alarm", c("next Friday set an alarm"))
+        assertEquals("Is Friday a holiday?", c("is Friday a holiday?"))
     }
 
     private val reply = VoiceInput.words("Done. I sent your wife a message on WhatsApp saying I love you.").toSet()
 
     @Test
     fun apnasOwnEchoIsNotAnInterruption() {
-        // What the recogniser makes of Apna's own voice, including small mishearings.
+        // What the recogniser makes of Friday's own voice, including small mishearings.
         assertFalse(VoiceInput.isBargeIn("DONE I SENT YOUR WIFE A MESSAGE", reply))
         assertFalse(VoiceInput.isBargeIn("SENT YOUR WIVE A MESSAGE ON WHATSAP", reply))
         assertFalse(VoiceInput.isBargeIn("", reply))

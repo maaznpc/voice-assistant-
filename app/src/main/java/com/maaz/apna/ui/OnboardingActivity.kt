@@ -91,34 +91,34 @@ class OnboardingActivity : AppCompatActivity() {
         ui.skipButton.text = if (step == Step.DONE) "Go to the app without activating" else "Skip for now"
 
         when (step) {
-            Step.WELCOME -> show(0, "Hello, I'm Apna",
-                "I can run your phone for you. Say \"Hey Apna\" and tell me what you need: send a message, open an app, change a setting.\n\nLet's get me set up. It takes about two minutes.",
+            Step.WELCOME -> show(0, "Hello, I'm Friday",
+                "I can run your phone for you. Say \"Hey Friday\" and tell me what you need: send a message, open an app, change a setting.\n\nLet's get me set up. It takes about two minutes.",
                 "Get started")
             Step.MICROPHONE -> {
                 show(R.drawable.ic_mic, "Let me hear you",
-                    "I need the microphone to hear \"Hey Apna\" and your commands. Listening for the wake word happens entirely on your phone.",
+                    "I need the microphone to hear \"Hey Friday\" and your commands. Listening for the wake word happens entirely on your phone.",
                     if (done) "Continue" else "Allow microphone")
                 // Ask straight away; Android shows its own permission prompt.
                 if (!done && askedFor.add(step)) requestPermissions(Setup.PERMISSIONS, 1)
             }
             Step.PHONE_CONTROL -> {
                 show(R.drawable.ic_touch, "Let me use your phone",
-                    "To tap, type and scroll for you, Android needs you to switch on Apna in Accessibility settings:\n\n1. Tap Open settings below\n2. Find Installed apps (or Downloaded apps)\n3. Tap Apna phone control and switch it on",
+                    "To tap, type and scroll for you, Android needs you to switch on Friday in Accessibility settings:\n\n1. Tap Open settings below\n2. Find Installed apps (or Downloaded apps)\n3. Tap Friday phone control and switch it on",
                     if (done) "Continue" else "Open settings")
                 if (!done && Build.VERSION.SDK_INT >= 33) {
-                    addNote("Greyed out or says \"Restricted setting\"? Open Apna's app info, tap ⋮ in the top corner, choose \"Allow restricted settings\", then try again.")
-                    addButton("Open Apna app info") {
+                    addNote("Greyed out or says \"Restricted setting\"? Open Friday's app info, tap ⋮ in the top corner, choose \"Allow restricted settings\", then try again.")
+                    addButton("Open Friday app info") {
                         startActivity(Intent(ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:$packageName")))
                     }
                 }
             }
             Step.BACKGROUND -> show(R.drawable.ic_battery, "Stay awake for you",
-                "Allow Apna to run in the background so I can still hear \"Hey Apna\" when your screen is off.\n\nOn Samsung, Xiaomi and some other phones, also set Apna's battery setting to \"Unrestricted\".",
+                "Allow Friday to run in the background so I can still hear \"Hey Friday\" when your screen is off.\n\nOn Samsung, Xiaomi and some other phones, also set Friday's battery setting to \"Unrestricted\".",
                 when { done -> "Continue"; step in attempted -> "Continue anyway"; else -> "Allow" })
             Step.DOWNLOADS -> {
                 val downloading = Downloads.progress.isNotEmpty()
                 show(R.drawable.ic_voice, "Ears and a voice",
-                    "Three downloads that run entirely on your phone: the \"Hey Apna\" listener, speech recognition for your commands, and Kokoro, a natural-sounding voice. Use Wi-Fi if you can. You can carry on while they download.",
+                    "Three downloads that run entirely on your phone: the \"Hey Friday\" listener, speech recognition for your commands, and Kokoro, a natural-sounding voice. Use Wi-Fi if you can. You can carry on while they download.",
                     when { done || downloading -> "Continue"; else -> "Download all (175 MB)" })
                 refreshDownloads = Setup.bindRows(this, ui.stepExtra, DOWNLOADS).also { it() }
             }
@@ -130,8 +130,8 @@ class OnboardingActivity : AppCompatActivity() {
                     if (primary == null) "Add a model" else "Continue")
             }
             Step.DONE -> show(0, "All systems online",
-                "Say \"Hey Apna\" any time, or tap the mic in the app. Try: \"Hey Apna, message my wife on WhatsApp and tell her I love her.\"",
-                "Turn on Apna")
+                "Say \"Hey Friday\" any time, or tap the mic in the app. Try: \"Hey Friday, message my wife on WhatsApp and tell her I love her.\"",
+                "Turn on Friday")
         }
 
         // Tick a step off as soon as the user comes back having done it.

@@ -29,7 +29,7 @@ class ApnaFeaturesTest {
     }
 
     @Test fun sleepOnlyMatchesControlPhrases() {
-        listOf("Go to sleep!", "Sleep", "Goodbye", "Apna so jao", "stand by").forEach {
+        listOf("Go to sleep!", "Sleep", "Goodbye", "Friday so jao", "stand by").forEach {
             assertTrue(it, ConversationControl.isSleep(it))
         }
         listOf("Why do people sleep?", "Set a sleep timer", "Play Goodbye", "Call Sleep Clinic").forEach {
@@ -68,11 +68,17 @@ class ApnaFeaturesTest {
 
     @Test fun phraseSelectionChangesActualDetectorTokens() {
         val settings = Settings(context)
+        assertEquals("friday", settings.wakePhraseId)
+        assertEquals("Hey Friday", VoiceInput(context) {}.wakePhrase.label)
+        context.getSharedPreferences("apna", Context.MODE_PRIVATE).edit()
+            .putString("wake_phrase", "apna").commit()
+        assertEquals("friday", Settings(context).wakePhraseId)
+        assertTrue(WakePhrases.find(settings.wakePhraseId).keywordLine().contains("▁F RI DAY"))
         settings.wakePhraseId = "computer"
         val input = VoiceInput(context) {}
         assertEquals("Hey Computer", input.wakePhrase.label)
         assertTrue(input.wakePhrase.keywordLine().contains("▁COMP U TER"))
-        assertFalse(WakePhrases.find("apna").keywordLine().contains("▁JA R VI S"))
+        assertEquals("friday", WakePhrases.find("apna").id)
         assertEquals("Open maps", VoiceInput.clean("hey computer open maps", "computer"))
         assertEquals("Set a timer", VoiceInput.clean("hey assistant set a timer", "assistant"))
         assertEquals("Explain computers", VoiceInput.clean("explain computers", "computer"))

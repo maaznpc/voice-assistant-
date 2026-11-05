@@ -41,7 +41,7 @@
             android:layout_marginTop="1dp"
             android:textColor="@color/text_dim"
             android:textSize="12sp"
-            tools:text="So Jarvis can hear you" />
+            tools:text="So Apna can hear you" />
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/progress"

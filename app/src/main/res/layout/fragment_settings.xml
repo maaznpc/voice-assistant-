@@ -18,7 +18,7 @@
         android:paddingBottom="24dp">
 
         <TextView
-            style="@style/Jarvis.PageTitle"
+            style="@style/Apna.PageTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Settings"
@@ -26,7 +26,7 @@
 
         <!-- Voice -->
         <TextView
-            style="@style/Jarvis.Section"
+            style="@style/Apna.Section"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -34,7 +34,7 @@
             tools:ignore="HardcodedText" />
 
         <com.google.android.material.card.MaterialCardView
-            style="@style/Jarvis.Card"
+            style="@style/Apna.Card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -101,7 +101,7 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/cloudKeyLayout"
-                        style="@style/Jarvis.Field"
+                        style="@style/Apna.Field"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="API key"
@@ -118,7 +118,7 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/cloudVoiceLayout"
-                        style="@style/Jarvis.Field"
+                        style="@style/Apna.Field"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Voice"
@@ -144,7 +144,7 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/cloudModelLayout"
-                        style="@style/Jarvis.Field"
+                        style="@style/Apna.Field"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Model"
@@ -160,7 +160,7 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/cloudUrlLayout"
-                        style="@style/Jarvis.Field"
+                        style="@style/Apna.Field"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Server address"
@@ -179,7 +179,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_marginStart="4dp"
-                        android:text="Needs an internet connection. If the voice can't be reached, Jarvis uses Kokoro or the phone's voice instead."
+                        android:text="Needs an internet connection. If the voice can't be reached, Apna uses Kokoro or the phone's voice instead."
                         android:textColor="@color/text_dim"
                         android:textSize="12sp"
                         tools:ignore="HardcodedText" />
@@ -233,14 +233,14 @@
 
         <!-- Wake word -->
         <TextView
-            style="@style/Jarvis.Section"
+            style="@style/Apna.Section"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Listening"
             tools:ignore="HardcodedText" />
 
         <com.google.android.material.card.MaterialCardView
-            style="@style/Jarvis.Card"
+            style="@style/Apna.Card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -260,10 +260,37 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="Listen for &quot;Hey Jarvis&quot;"
+                    android:text="Listen for the wake phrase"
                     android:textColor="@color/text"
                     tools:ignore="HardcodedText" />
 
+                <TextView
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp" android:text="Wake phrase"
+                    android:textColor="@color/text" tools:ignore="HardcodedText" />
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/wakePhraseChips" android:layout_width="match_parent" android:layout_height="wrap_content"
+                    app:singleSelection="true" app:selectionRequired="true" />
+                <TextView
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:text="Turn Apna off and on after changing the wake phrase."
+                    android:textColor="@color/text_dim" android:textSize="12sp" tools:ignore="HardcodedText" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp" android:hint="Return to standby after silence (5–60 seconds)"
+                    tools:ignore="HardcodedText">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/sleepTimeout" android:layout_width="match_parent" android:layout_height="wrap_content"
+                        android:inputType="number" android:maxLength="2" />
+                </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/mediaVolume" style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:text="Adjust speaker volume" tools:ignore="HardcodedText" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/clearConversation" style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:text="Clear conversation and sleep" tools:ignore="HardcodedText" />
                 <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/bootSwitch"
                     android:layout_width="match_parent"
@@ -285,7 +312,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="64dp"
-                    android:text="Talk over Jarvis, or say &quot;stop&quot;, and it stops and listens. Keeps the microphone on while it speaks, with echo cancellation."
+                    android:text="Talk over Apna, or say &quot;stop&quot;, and it stops and listens. Keeps the microphone on while it speaks, with echo cancellation."
                     android:textColor="@color/text_dim"
                     android:textSize="12sp"
                     tools:ignore="HardcodedText" />
@@ -303,7 +330,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="64dp"
-                    android:text="For a few seconds after answering, you can carry on without saying &quot;Hey Jarvis&quot; again."
+                    android:text="For a few seconds after answering, you can carry on without saying &quot;Hey Apna&quot; again."
                     android:textColor="@color/text_dim"
                     android:textSize="12sp"
                     tools:ignore="HardcodedText" />
@@ -312,14 +339,14 @@
 
         <!-- Permissions -->
         <TextView
-            style="@style/Jarvis.Section"
+            style="@style/Apna.Section"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Permissions"
             tools:ignore="HardcodedText" />
 
         <com.google.android.material.card.MaterialCardView
-            style="@style/Jarvis.Card"
+            style="@style/Apna.Card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -332,14 +359,14 @@
 
         <!-- About you -->
         <TextView
-            style="@style/Jarvis.Section"
+            style="@style/Apna.Section"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="About you"
             tools:ignore="HardcodedText" />
 
         <com.google.android.material.card.MaterialCardView
-            style="@style/Jarvis.Card"
+            style="@style/Apna.Card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -349,11 +376,11 @@
                 android:orientation="vertical">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Jarvis.Field"
+                    style="@style/Apna.Field"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="0dp"
-                    android:hint="Things Jarvis should know about you"
+                    android:hint="Things Apna should know about you"
                     app:helperText="e.g. My wife is saved as &quot;Amaka&quot; in WhatsApp"
                     app:helperTextTextColor="@color/text_dim">
 
@@ -371,7 +398,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="Show the task island at the top while Jarvis works"
+                    android:text="Show the task island at the top while Apna works"
                     android:textColor="@color/text"
                     tools:ignore="HardcodedText" />
 
@@ -385,7 +412,7 @@
                     tools:ignore="HardcodedText" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Jarvis.Field"
+                    style="@style/Apna.Field"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Max steps per task">
@@ -398,6 +425,11 @@
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/openSource" style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="About Apna · open source licenses" tools:ignore="HardcodedText" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/rerunSetup"

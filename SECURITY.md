@@ -1,29 +1,5 @@
-# Security Policy
+# Security and privacy
 
-Jarvis can read your screen and act on your phone, so security matters a lot here.
-
-## Reporting a vulnerability
-
-**Please don't open a public issue for security problems.**
-
-Report it privately through [GitHub's private vulnerability reporting](../../security/advisories/new) (Security tab → *Report a vulnerability*), or email **judejulius12@gmail.com**.
-
-Please include:
-- what the problem is and what an attacker could do with it
-- steps to reproduce, and the Android version and phone model
-- any ideas you have for a fix
-
-You'll get a reply within a week. Once a fix is released, we'll credit you, unless you'd rather stay anonymous.
-
-## What counts
-
-Examples of things we want to hear about:
-
-- **Prompt injection:** text on a web page, message or notification that makes Jarvis take actions the user didn't ask for, especially ones that get past the safety rules (payments, deletions, security settings, sending messages).
-- API keys or other data leaking out of the app's private storage, logs or crash reports.
-- Model downloads being tampered with or unpacked outside their folder.
-- Other apps being able to trigger Jarvis's service or actions.
-
-## Supported versions
-
-Only the latest release gets security fixes.
+This is a personal development assistant with Accessibility control. Report problems privately to the repository owner without including API keys, recordings or screen data.
+Private services are not exported. The Accessibility service requires Android's BIND_ACCESSIBILITY_SERVICE permission. Screenshots are opt-in, password fields are redacted, and arbitrary shell commands/intent URIs are not exposed as agent tools.
+Generic screen automation is powerful and model-directed; semantic prompt rules are not a full security boundary. Keep API keys limited, observe tasks and use the stop notification. Keys currently remain in app-private preferences, with backup disabled. See README.md for data flows and limits.

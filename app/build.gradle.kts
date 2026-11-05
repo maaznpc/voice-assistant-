@@ -7,15 +7,16 @@ plugins {
 }
 
 android {
-    namespace = "com.jarvis.assistant"
+    namespace = "com.maaz.apna"
     compileSdk = 35
+    buildToolsVersion = "35.0.0"
 
     defaultConfig {
-        applicationId = "com.jarvis.assistant"
+        applicationId = "com.maaz.apna"
         minSdk = 26
         targetSdk = 35
         versionCode = 1
-        versionName = "0.1.0"
+        versionName = "0.2.0-apna"
         // sherpa-onnx ships large native libraries. Nearly every phone from the last
         // several years is arm64; add "armeabi-v7a" (old 32-bit phones) or "x86_64" (emulator) if needed.
         ndk { abiFilters += listOf("arm64-v8a") }
@@ -23,14 +24,14 @@ android {
 
     // Release signing comes from environment variables (set by the release workflow from repository
     // secrets). Without them, release builds are unsigned and only debug builds can be installed.
-    val keystore = System.getenv("JARVIS_KEYSTORE")
+    val keystore = System.getenv("APNA_KEYSTORE")
     signingConfigs {
         if (keystore != null) {
             create("release") {
                 storeFile = file(keystore)
-                storePassword = System.getenv("JARVIS_KEYSTORE_PASSWORD")
-                keyAlias = System.getenv("JARVIS_KEY_ALIAS")
-                keyPassword = System.getenv("JARVIS_KEY_PASSWORD")
+                storePassword = System.getenv("APNA_KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("APNA_KEY_ALIAS")
+                keyPassword = System.getenv("APNA_KEY_PASSWORD")
             }
         }
     }
@@ -60,7 +61,7 @@ android {
                 // engine (Linux build) with real models. See test-native/README.md.
                 val native = rootProject.file("test-native")
                 val lib = native.resolve("sherpa-onnx-v1.13.8-linux-x64-jni/lib").absolutePath
-                it.systemProperty("jarvis.nativeDir", native.absolutePath)
+                it.systemProperty("apna.nativeDir", native.absolutePath)
                 it.environment("LD_LIBRARY_PATH", lib)
                 it.systemProperty("java.library.path", lib)
                 it.filter.includeTestsMatching("*RealEngineTest*")
@@ -114,7 +115,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     // Claude (official Anthropic Java SDK)
     implementation("com.anthropic:anthropic-java:2.34.0")
-    // Kokoro voice, "Hey Jarvis" and offline speech recognition: the official sherpa-onnx Android build,
+    // Kokoro voice, "Hey Apna" and offline speech recognition: the official sherpa-onnx Android build,
     // downloaded on the first build (too big to keep in git).
     implementation(files(sherpaAar).builtBy(fetchSherpaOnnx))
     implementation("org.apache.commons:commons-compress:1.27.1")

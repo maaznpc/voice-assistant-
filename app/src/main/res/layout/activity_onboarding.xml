@@ -50,7 +50,7 @@
             android:orientation="vertical"
             android:paddingTop="24dp">
 
-            <com.jarvis.assistant.ui.ArcReactorView
+            <com.maaz.apna.ui.ArcReactorView
                 android:id="@+id/reactor"
                 android:layout_width="96dp"
                 android:layout_height="96dp" />
@@ -75,7 +75,7 @@
                 android:gravity="center"
                 android:textColor="@color/text"
                 android:textSize="22sp"
-                tools:text="Let Jarvis hear you" />
+                tools:text="Let Apna hear you" />
 
             <TextView
                 android:id="@+id/stepBody"
@@ -86,7 +86,7 @@
                 android:lineSpacingExtra="4dp"
                 android:textColor="@color/text_dim"
                 android:textSize="15sp"
-                tools:text="Jarvis needs the microphone to hear “Hey Jarvis” and your commands." />
+                tools:text="Apna needs the microphone to hear “Hey Apna” and your commands." />
 
             <LinearLayout
                 android:id="@+id/stepExtra"
@@ -116,7 +116,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/primaryButton"
-        style="@style/Jarvis.PrimaryButton"
+        style="@style/Apna.PrimaryButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:text="Allow microphone" />

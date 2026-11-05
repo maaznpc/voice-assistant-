@@ -4,7 +4,6 @@ build/
 .kotlin/
 *.apk
 *.aab
-.github
 .git
 
 # Local machine settings
@@ -28,3 +27,8 @@ app/libs/*.part
 
 # JVM crash logs
 hs_err_pid*.log
+
+.env
+.env.*
+!*.example
+artifacts/

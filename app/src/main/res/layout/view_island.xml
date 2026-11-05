@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- The task island. IslandFrame draws the black shape and morphs it between the compact pill
      (@id/compact) and the expanded card (@id/expanded). -->
-<com.jarvis.assistant.ui.IslandFrame xmlns:android="http://schemas.android.com/apk/res/android"
+<com.maaz.apna.ui.IslandFrame xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/island"
     android:layout_width="wrap_content"
@@ -19,7 +19,7 @@
         android:paddingStart="9dp"
         android:paddingEnd="13dp">
 
-        <com.jarvis.assistant.ui.ArcReactorView
+        <com.maaz.apna.ui.ArcReactorView
             android:id="@+id/islandOrb"
             android:layout_width="20dp"
             android:layout_height="20dp" />
@@ -44,7 +44,7 @@
             android:textSize="13sp"
             tools:text="Opening WhatsApp…" />
 
-        <com.jarvis.assistant.ui.LevelBars
+        <com.maaz.apna.ui.LevelBars
             android:id="@+id/islandBars"
             android:layout_width="20dp"
             android:layout_height="16dp"
@@ -68,7 +68,7 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <com.jarvis.assistant.ui.ArcReactorView
+            <com.maaz.apna.ui.ArcReactorView
                 android:id="@+id/expOrb"
                 android:layout_width="26dp"
                 android:layout_height="26dp" />
@@ -79,7 +79,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_weight="1"
                 android:fontFamily="sans-serif-medium"
-                android:text="Jarvis"
+                android:text="Apna"
                 android:textColor="#FFFFFF"
                 android:textSize="15sp"
                 tools:ignore="HardcodedText" />
@@ -92,7 +92,7 @@
                 android:textSize="13sp"
                 tools:text="Working" />
 
-            <com.jarvis.assistant.ui.LevelBars
+            <com.maaz.apna.ui.LevelBars
                 android:id="@+id/expBars"
                 android:layout_width="20dp"
                 android:layout_height="16dp"
@@ -152,7 +152,7 @@
                 android:gravity="center"
                 android:textColor="#FFFFFF"
                 android:textSize="15sp"
-                tools:text="Open Jarvis" />
+                tools:text="Open Apna" />
         </LinearLayout>
     </LinearLayout>
-</com.jarvis.assistant.ui.IslandFrame>
+</com.maaz.apna.ui.IslandFrame>

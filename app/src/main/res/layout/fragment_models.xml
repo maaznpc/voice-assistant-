@@ -16,18 +16,18 @@
         android:paddingBottom="24dp">
 
         <TextView
-            style="@style/Jarvis.PageTitle"
+            style="@style/Apna.PageTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Models"
             tools:ignore="HardcodedText" />
 
         <TextView
-            style="@style/Jarvis.Body"
+            style="@style/Apna.Body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:text="Jarvis uses your primary model (★). Tap a model to edit it or make it primary."
+            android:text="Apna uses your primary model (★). Tap a model to edit it or make it primary."
             tools:ignore="HardcodedText" />
 
         <LinearLayout
@@ -40,7 +40,7 @@
         <!-- Empty state -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/empty"
-            style="@style/Jarvis.Card"
+            style="@style/Apna.Card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone">
@@ -71,7 +71,7 @@
                     tools:ignore="HardcodedText" />
 
                 <TextView
-                    style="@style/Jarvis.Body"
+                    style="@style/Apna.Body"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
@@ -83,7 +83,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/addButton"
-            style="@style/Jarvis.PrimaryButton"
+            style="@style/Apna.PrimaryButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -93,7 +93,7 @@
             tools:ignore="HardcodedText" />
 
         <com.google.android.material.card.MaterialCardView
-            style="@style/Jarvis.Card"
+            style="@style/Apna.Card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="22dp">
@@ -113,10 +113,10 @@
                     tools:ignore="HardcodedText" />
 
                 <TextView
-                    style="@style/Jarvis.Body"
+                    style="@style/Apna.Body"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="If the primary model can't be reached (offline, out of credit, server down), Jarvis carries on with your other models, top to bottom."
+                    android:text="If the primary model can't be reached (offline, out of credit, server down), Apna carries on with your other models, top to bottom."
                     android:textSize="12sp"
                     tools:ignore="HardcodedText" />
             </LinearLayout>

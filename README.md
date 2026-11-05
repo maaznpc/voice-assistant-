@@ -20,7 +20,7 @@ Examples: “Hey Apna, open YouTube”, “set a timer for five minutes”, “w
 ## Install and configure
 
 1. Use an **ARM64 Android 8.0+** phone. This build does not contain 32-bit ARM binaries. Ordinary conversation works while locked; unlock before app-control tasks.
-2. Install the development APK from a successful build or GitHub Actions artifact.
+2. Extract `app-debug.apk` from a successful GitHub Actions artifact. If Play Protect shows **“App blocked to protect your device”** with a sensitive-data/fraud warning, follow the [Windows development-install guide](docs/INSTALL_WINDOWS.md). Accessibility apps downloaded through a browser can trigger this block; changing Android versions or re-signing alone does not resolve it.
 3. Open Apna Assistant; grant microphone permission and enable **Apna phone control** in Accessibility. Configure background power settings for your device.
 4. Download wake detection (~17 MB) and offline English speech recognition (~57 MB). System TTS is the initial voice; Kokoro (~100 MB) is optional.
 5. Add a tool-calling provider in **Models** and use **Test connection**. Supply your own provider API key, or use an OpenAI-compatible local server such as Ollama/LM Studio. Model IDs are editable; availability varies. A ChatGPT subscription does not supply API credit.

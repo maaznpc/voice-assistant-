@@ -15,6 +15,8 @@ Version: `0.2.0-apna`; package: `com.maaz.apna`; minimum API 26; target/compile 
 
 SHA-256: `f69b7590c50e44966d49cb76fb06b2d449324ea6cd7bb6c781b4216d6562bc74`
 
+Separately, the APK downloaded from successful GitHub Actions run `41966859354` was verified with `apksigner` (valid v2 debug signature) and `aapt` (package/version/minimum SDK/ARM64). Its SHA-256 is `d466cef8ac1857bd483e076021e5e0c9f96f4278773ce182d277c061270582c2`; it differs from the local APK. The user reported the sensitive-data/fraud Play Protect installation block on Pixel 8 and Vivo Y20. See [Windows installation diagnosis](INSTALL_WINDOWS.md). Physical installation remains unverified; signature verification does not establish Play Protect acceptance.
+
 ## Not verified
 
 `adb devices` reported no connected device. Real microphone/speaker operation, wake false accepts/rejects, screen-off/OEM behavior, power use, interruptions in real noise, live API authorization/cost/latency, and real third-party app task completion were **not** tested. No provider API key was available. The optional native real-engine suite is excluded from the normal unit-test run. This remains a development build until the physical-device checklist in EVALUATION.md is completed.

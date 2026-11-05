@@ -1,0 +1,4 @@
+interface:
+  display_name: "Plan Agreement Review"
+  short_description: "Review plans and revise them when authorized"
+  default_prompt: "Use $plan-agreement-review to review this implementation plan with Claude and revise it until agreement."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Thinking: Expand Problem Space"
+  short_description: "Explore one unconventional angle at a time"
+  default_prompt: "Use $thinking-expand-problem-space to help me explore this problem from one new angle at a time."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Thinking: Investigate Root Causes"
+  short_description: "Extract evidence and verify causal explanations"
+  default_prompt: "Use $thinking-investigate-root-causes to extract and compare the evidence for this decomposition, then identify supported root causes without changing anything."

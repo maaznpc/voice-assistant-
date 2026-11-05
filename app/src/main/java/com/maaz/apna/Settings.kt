@@ -66,7 +66,7 @@ data class ProviderConfig(
 
 class Settings(context: Context) {
     internal val appContext = context.applicationContext
-    fun skillInstructions(): String = listOf("phone", "conversation").joinToString("\n\n") { name ->
+    fun skillInstructions(): String = listOf("phone", "conversation", "thinking").joinToString("\n\n") { name ->
         appContext.assets.open("skills/$name/SKILL.md").bufferedReader().use { it.readText().take(6000) }
     }
 

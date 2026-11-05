@@ -1,0 +1,4 @@
+interface:
+  display_name: "Plan Critique Review"
+  short_description: "Verify plan feedback against code before revising."
+  default_prompt: "Use $plan-critique-review to verify this plan feedback against repository evidence, revise only supported portions, reject contradicted portions, and surface unresolved portions without guessing; do not implement the plan."

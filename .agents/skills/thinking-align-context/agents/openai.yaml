@@ -1,0 +1,4 @@
+interface:
+  display_name: "Thinking Align Context"
+  short_description: "Inspect the goal and context guiding the agent"
+  default_prompt: "Use $thinking-align-context to show the goal you understand, which earlier information is guiding your responses and why, and how earlier topics relate to that goal."

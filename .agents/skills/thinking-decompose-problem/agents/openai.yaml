@@ -1,0 +1,4 @@
+interface:
+  display_name: "Thinking: Decompose Problem"
+  short_description: "Break problems into factors and causal hypotheses"
+  default_prompt: "Use $thinking-decompose-problem to decompose this problem and explore bounded causal hypotheses without solving it."

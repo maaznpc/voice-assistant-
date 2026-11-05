@@ -106,7 +106,9 @@ class SettingsFragment : Fragment() {
         ui.screenshotSwitch.setOnCheckedChangeListener { _, v -> settings.allowScreenshots = v }
 
         ui.openSource.setOnClickListener {
-            val license = requireContext().assets.open("legal/LICENSE.txt").bufferedReader().use { it.readText() }
+            val license = listOf("legal/LICENSE.txt", "legal/THINKING_SKILLS_LICENSE.txt").joinToString("\n\n") { path ->
+                requireContext().assets.open(path).bufferedReader().use { it.readText() }
+            }
             com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
                 .setTitle("Friday · Open source")
                 .setMessage("Based on Jarvis by Mohammad Joud Julius. Friday modifications are documented in the repository.\n\n" + license)

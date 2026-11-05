@@ -1,0 +1,4 @@
+interface:
+  display_name: "Thinking: Track Investigation"
+  short_description: "Track investigations and report next steps"
+  default_prompt: "Use $thinking-track-investigation to update a canonical investigation record or report its current status and next step."

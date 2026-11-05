@@ -1,0 +1,4 @@
+interface:
+  display_name: "Thinking: Evaluate CIRC"
+  short_description: "Evaluate instruction anatomy with CIRC"
+  default_prompt: "Use $thinking-evaluate-circ to evaluate this instruction against CIRC without executing or rewriting it."

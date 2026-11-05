@@ -2,6 +2,16 @@
 
 
 
+
+## Friday 0.3.2 — Thinking Skills
+
+- Imported all 20 original Codex skill folders from `SaulBurgos/thinking-skills` commit `f99b1b2b22d639de5103dbeefd59c9ecdf46b1ef` into `.agents/skills/`. Compared all 55 files in those folders byte-for-byte against the source; supporting files are intact. Upstream README and MIT license are also retained.
+- Friday loads a separate 2,530-character voice adaptation through `Settings.skillInstructions()`, below the 6,000-character per-skill loader limit. The existing loaded-skills test verifies that the thinking entry and its completion/short-reply guidance reach the model instructions.
+- `./gradlew assembleDebug testDebugUnitTest lintDebug --no-daemon`: **BUILD SUCCESSFUL**; **70 tests passed**, zero failures/errors. Lint: **zero errors, 47 warnings**.
+- APK ZIP inspection confirmed both `assets/skills/thinking/SKILL.md` and `assets/legal/THINKING_SKILLS_LICENSE.txt`. The license matches the source and is included in the in-app licenses dialog. `apksigner` verified the APK; `aapt` confirmed Friday version `0.3.2-friday`/5 and package `com.maaz.apna`.
+- Local APK: `artifacts/Friday-0.3.2-debug.apk`, 28038955 bytes; SHA-256 `a02aed85b90fa8c8ad2ae94926727a287b75e3c84b6755d5aff4035b0f414d45`. CI artifacts may have another hash/signing key.
+- These checks verify installation, packaging and prompt loading. No live model or physical phone was available to measure any improvement in reasoning or task performance. The original Codex workflows/scripts were installed, not executed; no Claude review was invoked.
+
 ## Friday 0.3.1 — Automatic language
 
 - Removed manual language selection; old stored language preferences are ignored. Each request/conversation drives response language and script. Urdu/Roman Urdu/Hinglish are handled without asking the user to classify them.

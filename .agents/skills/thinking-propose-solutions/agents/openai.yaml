@@ -1,0 +1,4 @@
+interface:
+  display_name: "Thinking: Propose Solutions"
+  short_description: "Compare solution directions before planning"
+  default_prompt: "Use $thinking-propose-solutions to compare viable solution directions and prepare a human decision before planning."

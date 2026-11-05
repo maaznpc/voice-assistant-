@@ -1,0 +1,4 @@
+interface:
+  display_name: "Thinking: Orchestrate to Plan"
+  short_description: "Route bugs or features into reviewed plans"
+  default_prompt: "Use $thinking-orchestrate-to-plan to take this bug or feature through the required workflow, then let me select an available review route or confirm Fast Review when Agreement Review is unavailable."

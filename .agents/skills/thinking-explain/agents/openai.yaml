@@ -1,0 +1,4 @@
+interface:
+  display_name: "Thinking: Explain"
+  short_description: "Explain difficult topics in plain language"
+  default_prompt: "Use $thinking-explain to help me understand this topic in plain language."

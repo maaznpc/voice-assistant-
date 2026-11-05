@@ -1,0 +1,4 @@
+interface:
+  display_name: "Thinking: Evaluate Bias"
+  short_description: "Check framing, evidence, and omissions for bias"
+  default_prompt: "Use $thinking-evaluate-bias to review this work for representation, confirmation, and omission bias."

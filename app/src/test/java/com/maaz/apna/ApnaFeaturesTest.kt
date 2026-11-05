@@ -88,6 +88,9 @@ class ApnaFeaturesTest {
         val skills = Settings(context).skillInstructions()
         assertTrue(skills.contains("name: phone-tasks"))
         assertTrue(skills.contains("name: conversation"))
+        assertTrue(skills.contains("name: thinking"))
+        assertTrue(skills.contains("Carry the requested job through completion"))
+        assertTrue(skills.contains("not a long internal reasoning transcript"))
         assertTrue(skills.contains("draft is not a sent message"))
     }
 

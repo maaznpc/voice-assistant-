@@ -15,7 +15,7 @@ Your own hands-free Android voice and phone assistant for Project 33.
 - Local **go to sleep**, **goodbye** and **stand by** commands clear conversation and return to wake-only listening. Configurable 5–60 second silence timeout after replies.
 - Open apps, read visible screen content, tap, type, scroll, swipe, Back/Home, notifications and optional screenshots through Android Accessibility.
 - Direct battery, media volume, search, URL, alarm, timer, dialer and SMS-draft actions. Other app workflows use the screen agent.
-- Bundled Markdown phone/conversation skills, provider connection tests, fallback models, task overlay and persistent notification with stop controls.
+- Bundled Markdown phone/conversation/thinking skills, provider connection tests, fallback models, task overlay and persistent notification with stop controls.
 
 Examples: “Hey Friday, open YouTube”, “set a timer for five minutes”, “what is my battery level?”, “set media volume to 30 percent”, “search for the weather in Lahore”, “open WhatsApp and send Ali I am on my way”, then “go to sleep”. Ambiguous contacts require clarification.
 
@@ -75,3 +75,7 @@ This version uses **STT → LLM → TTS**, not OpenAI Realtime/WebRTC speech-to-
 - There is no guarantee of every phone task succeeding. App layouts, permissions, hardware and the chosen model determine success. [Device evaluation](docs/EVALUATION.md) is required before claiming measured performance.
 
 MIT; original copyright retained in [LICENSE](LICENSE). Dependencies/models retain their own licenses; see [THIRD_PARTY.md](THIRD_PARTY.md).
+
+## Thinking skills
+
+[SaulBurgos/thinking-skills](https://github.com/SaulBurgos/thinking-skills) is installed as 20 complete repo-local Codex skills in `.agents/skills/`. Friday also loads a concise voice adaptation covering problem decomposition, evidence checks, comparisons, short plans and checking action outcomes. This is prompt guidance; it adds no phone permissions or model capabilities and does not run Claude Code or development scripts on Android. See [installation details](docs/THINKING_SKILLS.md).

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Thinking: Show Me"
+  short_description: "Explain with focused diagrams, diffs, or HTML"
+  default_prompt: "Use $thinking-show-me to explain this visually with the smallest useful diagram, diff, or HTML artifact."
+
+policy:
+  allow_implicit_invocation: false

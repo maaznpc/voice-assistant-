@@ -1,0 +1,4 @@
+interface:
+  display_name: "Thinking: Analyze Transcript"
+  short_description: "Extract decisions, actions, and key discussion"
+  default_prompt: "Use $thinking-analyze-transcript to identify the important information in this transcript."

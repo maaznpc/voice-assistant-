@@ -1,5 +1,11 @@
 # Changes
 
+## 0.3.2-friday
+
+- Installed all 20 original MIT thinking-skills folders as repo-local Codex skills, with supporting files and source attribution.
+- Bundled a concise phone-runtime thinking adaptation and loaded it alongside phone/conversation instructions; retained short multilingual replies and authorized task completion.
+- Added the upstream MIT notice to in-app licenses.
+
 ## 0.3.1-friday
 
 - Removed language selection. Infer language/script from every request and conversation; ignore old per-language preferences.

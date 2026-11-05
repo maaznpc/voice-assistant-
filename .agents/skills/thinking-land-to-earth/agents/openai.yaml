@@ -1,0 +1,7 @@
+interface:
+  display_name: "Thinking: Land to Earth"
+  short_description: "Ground fuzzy ideas through bounded questions"
+  default_prompt: "Use $thinking-land-to-earth to turn this fuzzy idea into a concrete Grounded Idea Card."
+
+policy:
+  allow_implicit_invocation: false

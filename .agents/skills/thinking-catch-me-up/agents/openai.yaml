@@ -1,0 +1,4 @@
+interface:
+  display_name: "Thinking: Catch Me Up"
+  short_description: "Resume a forgotten task with clear context"
+  default_prompt: "Use $thinking-catch-me-up to reorient me as if I remember nothing about this task."

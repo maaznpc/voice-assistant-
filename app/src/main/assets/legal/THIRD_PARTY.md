@@ -18,6 +18,8 @@ Retained foundations include the Kotlin UI, accessibility adapter, audio pipelin
 | Apache Commons Compress | Model unpacking | Apache-2.0 |
 | Gradle wrapper | Build tool | Apache-2.0 |
 
-Development guidance: Google's [Android permissions security skill](https://github.com/android/skills/blob/main/security/android-permissions-security/SKILL.md), read from GitHub. It is development guidance, not a phone runtime capability. The two bundled runtime skills were written for Friday.
+Development guidance: Google's [Android permissions security skill](https://github.com/android/skills/blob/main/security/android-permissions-security/SKILL.md), read from GitHub. It is development guidance, not a phone runtime capability. The phone and conversation runtime skills were written for Friday.
 
 Sanna was considered during discovery, but GitHub metadata reported no license; its source was not imported. No proprietary Nest/Alexa firmware was decompiled or used.
+
+Thinking skills: https://github.com/SaulBurgos/thinking-skills at `f99b1b2b22d639de5103dbeefd59c9ecdf46b1ef`, MIT, copyright (c) 2026 Saul Burgos Davila. All 20 original Codex skill folders (including references, agents, assets and scripts) are preserved under `.agents/skills/`. Friday loads a separate, concise voice adaptation of selected principles from `app/src/main/assets/skills/thinking/SKILL.md`; it does not execute the original developer workflows. The MIT notice is included in `app/src/main/assets/legal/THINKING_SKILLS_LICENSE.txt` and the in-app licenses dialog.

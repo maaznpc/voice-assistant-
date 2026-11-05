@@ -1,0 +1,4 @@
+interface:
+  display_name: "Plan Creation"
+  short_description: "Create structured implementation plans"
+  default_prompt: "Use $plan-creation to create a phased implementation plan."

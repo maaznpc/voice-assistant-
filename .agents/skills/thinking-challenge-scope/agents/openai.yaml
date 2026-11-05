@@ -1,0 +1,4 @@
+interface:
+  display_name: "Thinking: Challenge Scope"
+  short_description: "Find the smallest safe version of an approach"
+  default_prompt: "Use $thinking-challenge-scope to reduce the scope of this selected approach without breaking its core outcome."

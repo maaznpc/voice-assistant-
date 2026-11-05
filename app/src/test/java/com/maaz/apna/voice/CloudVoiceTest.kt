@@ -128,6 +128,7 @@ class CloudVoiceTest {
 
     @Test
     fun speakerFallsBackToALocalVoiceWhenTheCloudFails() {
+        org.robolectric.shadows.ShadowTextToSpeech.addLanguageAvailability(java.util.Locale.US)
         server.enqueue(MockResponse().setResponseCode(500))
         val settings = Settings(ctx)
         settings.voiceEngine = "custom"

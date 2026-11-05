@@ -1,5 +1,16 @@
 # Validation — 2026-11-05
 
+
+## Friday 0.3.0 — Urdu and Roman Urdu
+
+- `./gradlew assembleDebug testDebugUnitTest lintDebug --no-daemon`: **BUILD SUCCESSFUL**. **64 tests passed**, zero failures/errors. Lint: **zero errors, 47 warnings** (including two advisory SwitchIntDef warnings for recognition error codes).
+- New Robolectric checks cover Urdu recognition delivery, cancellation/late callback rejection, timeout, Urdu/Hindi local sleep controls, distinct Roman-display/Urdu-speech agent results, installed Urdu TTS and an explicit missing-Urdu-voice path. The English cloud-voice fallback test now explicitly supplies an installed English voice.
+- The recognizer and TTS tests use Android shadows and a fake model; they do **not** measure real recognition accuracy, pronunciation, network recognition or API provider behavior.
+- `apksigner` verified the APK. `aapt` confirmed label Friday, package `com.maaz.apna`, version `0.3.0-friday`/3, minimum API 26 and ARM64. The updated language settings render was visually checked and the README image refreshed.
+- Local APK: `artifacts/Friday-0.3.0-debug.apk` — 28085141 bytes. SHA-256: `3bbda2526124697ac2bb675519c324e2d1c63945bd24e7dc4a9fa5ead2350b7a`. CI artifacts use **Friday-debug** and may have a different hash/signing key.
+- Urdu/Roman Urdu and Hindi/Hinglish command recognition uses the installed Android speech service after wake-up and may send activated audio to that provider. English code-switching requests on Android 14+ depend on service support. Urdu/Hindi replies require an installed matching TTS voice or a multilingual cloud TTS provider. Wake detection remains local. Talk-over interruption remains limited to offline English; other modes support hands-free follow-ups after replies.
+- No physical phone or live model key was available. The existing Play Protect block remains a separate unresolved installation issue; changing language support does not remove it.
+
 ## Friday 0.2.1
 
 - App label **Friday**, version code **2**, package `com.maaz.apna`, minimum Android 8.0/API 26, ARM64.

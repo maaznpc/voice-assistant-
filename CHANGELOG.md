@@ -1,5 +1,12 @@
 # Changes
 
+## 0.3.0-friday
+
+- Added Urdu, Roman Urdu, Hindi and Hinglish speech/reply settings with Android recognition after activation and optional Android 14+ English switching.
+- Added native-script speech fields for Roman replies, script-aware system TTS and an explicit missing-voice message; skip English-only Kokoro for Urdu/Hindi.
+- Added system-recognizer follow-ups, bounded recognition timeout and stale callback rejection, plus native Urdu/Hindi sleep phrases.
+- Wake detection remains local. Urdu/Hindi recognition and pronunciation depend on the phone service and installed TTS voices and have not been tested on physical phones.
+
 ## 0.2.1-friday
 
 - Renamed the launcher, screens, notifications and assistant identity to Friday; updated the icon to F.

@@ -157,6 +157,6 @@ class CloudVoice {
     companion object {
         private const val TAG = "CloudVoice"
         /** How gpt-4o voices are asked to sound. */
-        const val APNA_STYLE = "Speak like a calm, composed British butler: warm, clear and concise, with a hint of dry wit."
+        const val APNA_STYLE = "Speak warmly, clearly and concisely in the language of the supplied text. Use natural Urdu pronunciation for Urdu and natural Hindi pronunciation for Hindi; preserve English names."
     }
 }

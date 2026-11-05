@@ -15,8 +15,8 @@ android {
         applicationId = "com.maaz.apna"
         minSdk = 26
         targetSdk = 35
-        versionCode = 2
-        versionName = "0.2.1-friday"
+        versionCode = 3
+        versionName = "0.3.0-friday"
         // sherpa-onnx ships large native libraries. Nearly every phone from the last
         // several years is arm64; add "armeabi-v7a" (old 32-bit phones) or "x86_64" (emulator) if needed.
         ndk { abiFilters += listOf("arm64-v8a") }

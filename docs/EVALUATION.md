@@ -24,3 +24,14 @@ Record phone model, Android version, RAM, app build, wake phrase, speech/voice e
 
 CSV columns: `trial_id,device,android,phrase,room,distance_m,expected_wake,detected,false_activation,latency_ms,task,outcome,notes`.
 Get consent for evaluation recordings, keep them out of Git, and delete on request. The app does not save raw microphone recordings by default.
+
+## Multilingual device checks
+
+Select Urdu, Roman Urdu, Hindi or Hinglish in Settings and restart Friday. Keep the local Hey Friday detector enabled. Wait for the prompt, then speak each request in Urdu or mixed English/Urdu. Repeat with the screen locked for ordinary conversation, then unlocked for app actions.
+
+- Try “WhatsApp کھولو”, “battery kitni hai?”, “mujhe machine learning samjhao” and a follow-up without another wake phrase. Check the actual transcript and reply, rather than relying on success claims.
+- Roman Urdu replies must display Latin letters and speak the same answer from the Urdu-script field. Check native Urdu pronunciation with several speakers.
+- Try “سو جاؤ” and “خدا حافظ”; these must return to wake-only standby without an AI request.
+- Check unavailable language/network errors, silence timeout, stop during recognition, and missing Urdu TTS data. Missing voice must leave a readable reply and show setup guidance.
+- Android 14+ language switching is a request to the speech service, not a guarantee. Test mixed English names and numbers separately on Pixel 8 and Vivo Y20.
+- Confirm no active recognition runs in standby. System recognition may send activated audio to its provider; ordinary English offline mode remains available.

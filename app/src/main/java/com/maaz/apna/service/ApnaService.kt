@@ -277,7 +277,8 @@ class ApnaService : Service() {
             val heard: (String?) -> Unit = { text ->
                 if (!destroyed && generation == listeningGeneration) onHeard(text, followUp)
             }
-            if (followUp) google.listen(heard) else say("Yes?") { google.listen(heard) }
+            val timeout = if (followUp) ConversationControl.timeoutMs(settings.sleepTimeoutSeconds) else 10_000L
+            if (followUp) google.listen(timeout, heard) else say(if (settings.speechLanguage.locale == "ur-PK") "جی، بولیے؟" else if (settings.speechLanguage.locale == "hi-IN") "जी, बोलिए?" else "Yes?") { google.listen(timeout, heard) }
         }
     }
 
@@ -293,7 +294,7 @@ class ApnaService : Service() {
             }
             text.isNullOrBlank() -> {
                 state = State.IDLE
-                update("Didn't catch that")
+                update(google.lastError ?: "Didn't catch that")
                 say("Sorry, I didn't catch that.", interruptible = true) { island { it.hide() }; resumeListening() }
             }
             ConversationControl.isSleep(text) -> enterStandby()
@@ -352,7 +353,7 @@ class ApnaService : Service() {
                 remember(task, result.summary)
                 island { it.finish(result.success, result.summary) }
                 update(result.summary)
-                say(result.summary, interruptible = true) {
+                say(result.spokenSummary, interruptible = true) {
                     state = State.IDLE
                     afterReply()
                 }
@@ -363,7 +364,7 @@ class ApnaService : Service() {
     /** After a reply: listen for a follow-up without the wake word, or go back to waiting. */
     private fun afterReply() {
         if (destroyed) return
-        if (settings.followUp && voice.canTranscribe) listen(promptIfQuiet = false, followUp = true)
+        if (settings.followUp && (voice.canTranscribe || android.speech.SpeechRecognizer.isRecognitionAvailable(this))) listen(promptIfQuiet = false, followUp = true)
         else enterStandby()
     }
 
@@ -428,13 +429,14 @@ class ApnaService : Service() {
             return !isCancelled
         }
         override fun status(text: String) { main.post { if (!isCancelled && !destroyed) update(text) } }
-        override fun ask(question: String): String? {
+        override fun ask(question: String): String? = askSpoken(question, question)
+        override fun askSpoken(question: String, spokenQuestion: String): String? {
             val latch = CountDownLatch(1)
             var answer: String? = null
             main.post {
                 if (isCancelled || destroyed) { latch.countDown(); return@post }
                 update("Asking: $question")
-                say(question) {
+                say(spokenQuestion) {
                     island { it.listening(if (voice.canTranscribe) ({ voice.partialText }) else null, { voice.level }) }
                     val got: (String?) -> Unit = { text ->
                         if (!isCancelled && !destroyed) { answer = text; island { it.working() } }

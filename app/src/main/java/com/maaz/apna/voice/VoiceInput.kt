@@ -122,7 +122,7 @@ class VoiceInput(private val context: Context, private val onWake: () -> Unit) {
     // after it's said, so this is replayed into the transcriber to catch words said straight after it.
     private val recent = ArrayDeque<FloatArray>()
 
-    val canTranscribe get() = recognizer != null
+    val canTranscribe get() = recognizer != null && com.maaz.apna.Settings(context).speechLanguage.isOffline
 
     /** Whether the microphone is open. */
     val isListening get() = running
@@ -177,7 +177,7 @@ class VoiceInput(private val context: Context, private val onWake: () -> Unit) {
                     errors += "The wake word couldn't start. Try downloading it again in Settings."
                 }
             }
-            if (recognizer == null && SpeechModel.isInstalled(context)) {
+            if (recognizer == null && com.maaz.apna.Settings(context).speechLanguage.isOffline && SpeechModel.isInstalled(context)) {
                 try {
                     val dir = SpeechModel.dir(context)
                     recognizer = OnlineRecognizer(
@@ -475,7 +475,7 @@ class VoiceInput(private val context: Context, private val onWake: () -> Unit) {
 
         /** Lower-case words, letters and apostrophes only. */
         fun words(text: String): List<String> =
-            text.lowercase().split(Regex("\\s+")).map { w -> w.filter { it.isLetter() || it == '\'' } }.filter { it.isNotEmpty() }
+            text.lowercase().split(Regex("\\s+")).map { w -> w.filter { it.isLetter() || it.category in setOf(CharCategory.NON_SPACING_MARK, CharCategory.COMBINING_SPACING_MARK) || it == '\'' } }.filter { it.isNotEmpty() }
 
         /**
          * Whether a sentence Friday is about to say contains something the "stop" keyword could mistake

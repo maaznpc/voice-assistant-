@@ -60,6 +60,16 @@ class SettingsFragment : Fragment() {
         ui.previewButton.setOnClickListener { previewVoice() }
         showVoiceSection()
 
+        com.maaz.apna.voice.SpeechLanguage.entries.forEach { ui.languageChips.addChoice(it.label, it.id) }
+        ui.languageChips.select(settings.speechLanguage.id)
+        ui.languageChips.setOnCheckedStateChangeListener { _, _ ->
+            settings.speechLanguage = com.maaz.apna.voice.SpeechLanguage.find(ui.languageChips.selectedTag)
+        }
+        ui.ttsSettings.setOnClickListener {
+            runCatching { startActivity(Intent("com.android.settings.TTS_SETTINGS")) }
+                .onFailure { Toast.makeText(requireContext(), "Open Android Settings and search Text-to-speech.", Toast.LENGTH_LONG).show() }
+        }
+
         // Wake word
         refreshers += Setup.bindRows(activity, ui.wakeRow, listOf(Setup.Item.WAKE_WORD, Setup.Item.SPEECH))
         WakePhrases.all.forEach { ui.wakePhraseChips.addChoice(it.label, it.id) }
@@ -186,21 +196,17 @@ class SettingsFragment : Fragment() {
         if (settings.voiceEngine == "kokoro" && !Kokoro.isInstalled(requireContext())) {
             Toast.makeText(requireContext(), "Download the Kokoro voice first. Playing the system voice for now.", Toast.LENGTH_SHORT).show()
         }
-        val voice = when {
-            cloud != null -> "${cloud.name}"
-            else -> KOKORO_VOICES.firstOrNull { it.sid == settings.kokoroSpeaker }?.name ?: "Friday"
-        }
         ui.previewButton.isEnabled = false
         ui.previewButton.text = "Speaking…"
         val speaker = preview ?: Speaker(requireContext()).also { preview = it }
-        speaker.speak("Good evening. This is the $voice voice. All systems are online and ready when you are.") {
+        speaker.speak(settings.speechLanguage.preview) {
             _ui?.let {
                 it.previewButton.isEnabled = true
                 it.previewButton.text = "Preview voice"
                 // If the voice had a problem, say so here rather than failing silently.
                 val error = speaker.lastError
                 it.voiceError.visibility = if (error != null) View.VISIBLE else View.GONE
-                it.voiceError.text = if (cloud != null) "$error\nPlayed the backup voice instead." else "Kokoro problem: $error"
+                it.voiceError.text = if (cloud != null) "$error\nPlayed the backup voice instead." else error
             }
         }
     }

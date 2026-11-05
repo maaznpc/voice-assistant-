@@ -15,12 +15,13 @@ interface AgentHost {
     fun status(text: String)
     /** Speak [question] and return what the person says back, or null if they didn't answer. */
     fun ask(question: String): String?
+    fun askSpoken(question: String, spokenQuestion: String): String? = ask(spokenQuestion)
     /** Called only for UI actions, not ordinary conversation. */
     fun ensureUnlocked(): Boolean
     val isCancelled: Boolean
 }
 
-data class AgentResult(val success: Boolean, val summary: String)
+data class AgentResult(val success: Boolean, val summary: String, val spokenSummary: String = summary)
 
 /**
  * Observe the screen, ask the model for the next action, perform it, repeat - until the model
@@ -111,7 +112,7 @@ class PhoneAgent(
                     continue
                 }
                 if (call.name == "finish") {
-                    return Outcome.Done(AgentResult(call.arguments.optBoolean("success", true), call.arguments.optString("summary", "Done.")))
+                    return Outcome.Done(AgentResult(call.arguments.optBoolean("success", true), call.arguments.optString("summary", "Done."), call.arguments.optString("spoken_summary").ifBlank { call.arguments.optString("summary", "Done.") }))
                 }
                 if (host.isCancelled) return Outcome.Done(AgentResult(false, "Okay, I stopped."))
                 results += execute(a11y, call)
@@ -128,7 +129,7 @@ class PhoneAgent(
         return try {
             check(!host.isCancelled) { "Task cancelled." }
             if (call.name == "ask_user") {
-                val answer = host.ask(a.getString("question")) ?: "No answer received."
+                val answer = host.askSpoken(a.getString("question"), a.optString("spoken_question").ifBlank { a.getString("question") }) ?: "No answer received."
                 return ToolOutput(call.id, "The user replied: $answer\n\n${observe(a11y)}")
             }
             if (call.name == "device_action" && a.optString("action") in setOf("battery", "volume")) {
@@ -220,6 +221,9 @@ Ask before acting when it matters:
 
 When done, call finish with a one or two sentence summary written to be spoken aloud, e.g. "Done, I sent your wife 'I love you' on WhatsApp." If you could not do it, call finish with success=false and say briefly why.
 
+Language preference:
+${settings.speechLanguage.prompt}
+
 Bundled skills:
 ${settings.skillInstructions()}
 
@@ -262,9 +266,9 @@ ${if (notes.isNotEmpty()) "\nThings the user has told you about themselves:\n$no
             obj("seconds" to JSONObject().put("type", "number").put("description", "How long to wait, up to 15."), required = listOf("seconds"))))
         if (canScreenshot) add(ToolSpec("look_at_screen", "Get a screenshot of the current screen.", obj()))
         add(ToolSpec("ask_user", "Ask the user a short spoken question and get their spoken answer.",
-            obj("question" to str("The question, phrased to be spoken aloud."), required = listOf("question"))))
+            obj("spoken_question" to str("The same question in native script for speech (Urdu script for Roman Urdu; Devanagari for Hinglish)."), "question" to str("The question, phrased to be spoken aloud."), required = listOf("question") + if (settings.speechLanguage.needsSpokenText) listOf("spoken_question") else emptyList())))
         add(ToolSpec("finish", "End the task and tell the user the outcome.",
-            obj("summary" to str("One or two sentences to speak to the user."), "success" to bool("Whether the task was completed."), required = listOf("summary", "success"))))
+            obj("spoken_summary" to str("The same reply in native script for speech (Urdu script for Roman Urdu; Devanagari for Hinglish)."), "summary" to str("One or two sentences to speak to the user."), "success" to bool("Whether the task was completed."), required = listOf("summary", "success") + if (settings.speechLanguage.needsSpokenText) listOf("spoken_summary") else emptyList())))
     }
 
     private fun JSONObject.optIntOrNull(key: String): Int? = if (has(key) && !isNull(key)) optInt(key) else null

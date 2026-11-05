@@ -2,6 +2,8 @@
 
 Your own hands-free Android voice and phone assistant for Project 33.
 
+**Languages:** English, Urdu, Roman Urdu, Hindi and Hinglish. Select **Settings → Speech and reply language**, then turn Friday off and on.
+
 **Development build:** actual wake accuracy, battery use and live-provider task success must be measured on your phone. This is a customized, MIT-licensed derivative of [Jarvis](https://github.com/judejulius/jarvis), with original attribution preserved. See [source analysis](docs/REVERSE_ENGINEERING.md), [credits](THIRD_PARTY.md) and [validation](docs/VALIDATION.md).
 
 <img src="docs/images/home.png" alt="Friday home screen rendered by the UI test" width="240"> <img src="docs/images/settings.png" alt="Friday settings rendered by the UI test" width="240">
@@ -53,11 +55,13 @@ STANDBY: clear task and conversation; resume local wake detection
 
 `ApnaService` controls the lifecycle; `VoiceInput` owns the microphone and speech engines; `PhoneAgent` observes, runs one tool and checks a fresh screen; `DeviceActions` implements native intents and settings. No root or ADB is needed for app control. Extend runtime skills in `app/src/main/assets/skills/` and register their folders in `Settings.skillInstructions()`.
 
-This version uses **STT → LLM → TTS**, not OpenAI Realtime/WebRTC speech-to-speech. Response delay depends on the selected model, network and voice engine. Offline ASR and Kokoro are English-focused; Urdu speech requires suitable recognition/voice configuration and is not verified here.
+This version uses **STT → LLM → TTS**, not OpenAI Realtime/WebRTC speech-to-speech. Response delay depends on the selected model, network and voice engine. Offline ASR and Kokoro are English-focused. Urdu/Roman Urdu and Hindi/Hinglish use the Android recognition service after activation, with an explicit Urdu (`ur-PK`) or Hindi (`hi-IN`) locale. Android 14+ services can optionally switch with English; support depends on the installed service. Internet may be required. Pause after the wake phrase and wait for the listening prompt. Talk-over interruption is limited to offline English; other modes support automatic follow-ups after replies.
+
+The selected AI model interprets Urdu, Roman Urdu and mixed commands. Urdu replies use native script. Roman Urdu replies display Latin text and carry a separate Urdu-script speech field, avoiding an English reading of Roman Urdu. Hindi/Hinglish work similarly. System TTS selects the language from the spoken script. Install a matching Urdu/Hindi TTS voice in Android Settings, or use a multilingual cloud TTS provider with your own key. English-only Kokoro is skipped for native-script replies. If a voice is unavailable, the app shows a message and retains the reply on screen. Actual recognition, code-switching and pronunciation need physical-phone testing.
 
 ## Privacy and limitations
 
-- Wake audio stays on-device. Friday does not save raw microphone recordings. Offline ASR keeps command audio local too; the optional Android recognizer fallback may use Google's servers.
+- Wake audio stays on-device. Friday does not save raw microphone recordings. Offline ASR keeps command audio local too; the Android recognition service used by Urdu/Hindi modes and the English fallback may send active audio to its provider. Wake-word audio stays local.
 - Active tasks send command transcripts and visible screen text to your selected provider. Screenshot sharing defaults off. Password text is redacted and password typing is rejected, but sensitive content in other fields can still be visible to the agent.
 - Optional cloud TTS receives reply text. API keys are in private app preferences, excluded from Android backup; this version does not encrypt those preferences with a hardware-backed key. Use a limited personal key. HTTP is supported for local model servers; use HTTPS for cloud providers or untrusted networks.
 - Sleep/clear removes in-memory conversation and the last result. Crash reports can be dismissed from Home. Personal notes and provider settings persist. Provider-side records are outside the app's deletion control.

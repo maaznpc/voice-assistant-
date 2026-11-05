@@ -9,9 +9,11 @@ import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 
 /** Android's built-in text-to-speech. Completion callbacks run on the main thread. */
-class SystemVoice(context: Context) : VoiceEngine {
+class SystemVoice(private val context: Context) : VoiceEngine {
     private val main = Handler(Looper.getMainLooper())
     private val pending = ConcurrentHashMap<String, () -> Unit>()
+    var lastError: String? = null
+        private set
     private var initDone = false
     private var ready = false
     private val queued = mutableListOf<Pair<String, () -> Unit>>()
@@ -44,9 +46,22 @@ class SystemVoice(context: Context) : VoiceEngine {
         main.post {
             if (!initDone) { queued += text to onDone; return@post }
             if (!ready) { onDone(); return@post }
+            val language = SpeechLanguage.ttsLocale(text)
+            val result = tts.setLanguage(java.util.Locale.forLanguageTag(language))
+            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                lastError = "No $language system voice. Install its TTS voice data in Android Settings or select a multilingual cloud voice. The reply is available on screen."
+                android.widget.Toast.makeText(context, lastError, android.widget.Toast.LENGTH_LONG).show()
+                onDone()
+                return@post
+            }
+            lastError = null
+            tts.setSpeechRate(com.maaz.apna.Settings(context).voiceSpeed)
             val id = UUID.randomUUID().toString()
             pending[id] = onDone
-            tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, id)
+            if (tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, id) == TextToSpeech.ERROR) {
+                lastError = "The system voice could not speak this reply."
+                finish(id)
+            }
         }
     }
 

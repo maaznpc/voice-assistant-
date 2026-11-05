@@ -231,6 +231,18 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <TextView style="@style/Apna.Section" android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="Speech and reply language" tools:ignore="HardcodedText" />
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/languageChips" android:layout_width="match_parent" android:layout_height="wrap_content"
+            app:singleSelection="true" app:selectionRequired="true" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="12sp"
+            android:textColor="@color/text_dim" tools:ignore="HardcodedText"
+            android:text="Urdu/Roman Urdu and Hindi/Hinglish use your phone’s speech service after wake-up; internet may be required. Wait for the listening prompt before speaking. Install a matching system TTS voice or choose a multilingual cloud voice. Roman replies use native script for speech. Restart Friday after changing language. Talk-over interruption is available in offline English mode; other modes listen again after the reply." />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/ttsSettings" style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Open text-to-speech settings" tools:ignore="HardcodedText" />
+
         <!-- Wake word -->
         <TextView
             style="@style/Apna.Section"

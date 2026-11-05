@@ -25,7 +25,7 @@ class Speaker(context: Context) {
     /** Whether the current speech can report its loudness (everything except Android's voice). */
     @Volatile private var measurable = false
 
-    val usingKokoro get() = settings.voiceEngine == "kokoro" && kokoroReady
+    val usingKokoro get() = settings.speechLanguage.isOffline && settings.voiceEngine == "kokoro" && kokoroReady
 
     private val kokoroReady get() = Kokoro.isInstalled(app) && !Kokoro.failed
 
@@ -36,7 +36,7 @@ class Speaker(context: Context) {
 
     /** The last problem with the chosen voice, for Settings. */
     val lastError: String?
-        get() = if (cloudConfig() != null || settings.voiceEngine in CLOUD_VOICES.map { it.id }) cloud.lastError else Kokoro.lastError
+        get() = if (cloudConfig() != null || settings.voiceEngine in CLOUD_VOICES.map { it.id }) cloud.lastError else if (usedSystem) system.lastError else Kokoro.lastError
 
     fun speak(text: String, onDone: () -> Unit = {}) {
         val config = cloudConfig()
@@ -51,7 +51,7 @@ class Speaker(context: Context) {
 
     private fun speakLocally(text: String, onDone: () -> Unit) {
         // Kokoro when chosen, or as the fallback for a cloud voice; otherwise Android's voice.
-        if (kokoroReady && settings.voiceEngine != "system") {
+        if (kokoroReady && settings.voiceEngine != "system" && SpeechLanguage.ttsLocale(text) == "en-US") {
             measurable = true
             Kokoro.speak(app, text, settings.kokoroSpeaker, settings.voiceSpeed, onDone)
         } else {
